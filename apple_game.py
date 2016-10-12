@@ -22,7 +22,7 @@ class AppleFinder(CYLGame):
                               "Bon appetit", "Ewwww, I think that one had a worm."]
 
     NUM_OF_APPLES = 4
-    MAX_TURNS = 99
+    MAX_TURNS = 200
 
     PLAYER = '@'
     APPLE = 'O'
@@ -60,9 +60,6 @@ class AppleFinder(CYLGame):
 
     def handle_key(self, key):
         self.turns += 1
-        if self.turns > self.MAX_TURNS:
-            self.running = False
-            return
 
         self.map[self.player_pos[1]][self.player_pos[0]] = self.EMPTY
         if key == "w":
@@ -135,6 +132,11 @@ class AppleFinder(CYLGame):
             return open("apple_bot.lp", "r").read()
 
     def draw_screen(self, libtcod, console):
+        # End of the game
+        if self.turns >= self.MAX_TURNS:
+            self.running = False
+            self.msgs += ["You are out of moves."]
+            self.msgs += ["You ate "+str(self.apples_eaten)+" apples. Good job!"]
         # self.msgs += ["Dist to closest apple: " + str(self.find_closest_apple(*self.player_pos))]
         libtcod.console_set_default_foreground(console, libtcod.white)
         for x in range(self.MAP_WIDTH):
@@ -150,6 +152,11 @@ class AppleFinder(CYLGame):
         for i in range(len(msg_str)):
             libtcod.console_put_char(console, 2+i, self.MAP_HEIGHT + 2, msg_str[i])
 
+        # print turn count
+        msg_str = "Move: " + str(self.turns) + " of " + str(self.MAX_TURNS)
+        for i in range(len(msg_str)):
+            libtcod.console_put_char(console, 2+i, self.MAP_HEIGHT + 3, msg_str[i])
+
         for j in range(len(self.msgs[-3:])):
             # Clear msg board
             for i in range(self.MAX_MSG_LEN):
@@ -161,8 +168,8 @@ class AppleFinder(CYLGame):
 
 if __name__ == '__main__':
     if len(sys.argv) <= 1:
-        print("Run: python game.py serve\nTo start web server.\nRun: python game.py play\n To play on this computer.")
-    if sys.argv[1] == "serve":
+        print("Run: python game.py serve\n To start web server.\nRun: python game.py play\n To play on this computer.")
+    elif sys.argv[1] == "serve":
         serve(AppleFinder)
     elif sys.argv[1] == "play":
         from CYLGameServer import CYLGameRunner
