@@ -74,7 +74,7 @@ class AppleFinder(CYLGame):
 
     NUM_OF_APPLES = 4
     NUM_OF_PITS_START = 0
-    NUM_OF_PITS_PER_LEVEL = 4
+    NUM_OF_PITS_PER_LEVEL = 8
     MAX_TURNS = 200
 
     PLAYER = '@'
@@ -225,7 +225,8 @@ class AppleFinder(CYLGame):
         if not self.running:
             if self.apples_eaten == 0:
                 self.msgs += ["You ate "+str(self.apples_eaten)+" apples. Better luck next time :("]
-            self.msgs += ["You ate "+str(self.apples_eaten)+" apples. Good job!"]
+            else:
+                self.msgs += ["You ate "+str(self.apples_eaten)+" apples. Good job!"]
 
         libtcod.console_set_default_foreground(console, libtcod.white)
         for pos, char in self.map.get_diff().iteritems():
