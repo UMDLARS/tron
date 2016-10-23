@@ -2,59 +2,12 @@ from __future__ import print_function
 import sys
 import math
 import random
-from collections import defaultdict
-from CYLGameServer import serve
-from CYLGameServer import CYLGameLanguage
-from CYLGameServer import CYLGame
-
-
-# WARNING: this does not do bounds checking
-class Map(object):
-    def __init__(self, default_char=''):
-        self.char_to_ps = defaultdict(set)
-        self.p_to_char = defaultdict(lambda: default_char)
-        self.default_char = default_char
-        self.changes = {}
-
-    def __setitem__(self, key, value):
-        self.add(value, key)
-
-    def __getitem__(self, item):
-        return self.get_char_at(item)
-
-    # changes in the format of a dictionary
-    # key: (x, y)
-    # value: new_char
-    def get_diff(self):
-        changes = self.changes
-        self.changes = {}
-        return changes
-
-    # pos must be tuple
-    def add(self, char, pos):
-        assert type(pos) == tuple
-        if pos in self.p_to_char.keys():
-            self.rm_char(pos)
-        self.char_to_ps[char].add(pos)
-        self.p_to_char[pos] = char
-        self.changes[pos] = char
-
-    # pos must be tuple
-    def rm_char(self, pos):
-        assert type(pos) == tuple
-        char = self.p_to_char[pos]
-        del self.p_to_char[pos]
-        if char in self.char_to_ps and pos in self.char_to_ps[char]:
-            self.char_to_ps[char].remove(pos)
-            self.changes[pos] = self.default_char
-
-    # returns a set of pos
-    def get_all_pos(self, char):
-        return self.char_to_ps[char]
-
-    # will return default_char if the position is not set
-    def get_char_at(self, pos):
-        return self.p_to_char[pos]
+from CYLGame import serve
+from CYLGame import CYLGameLanguage
+from CYLGame import CYLGame
+from CYLGame import MessagePanel
+from CYLGame import MapPanel
+from CYLGame import StatusPanel
 
 
 class AppleFinder(CYLGame):
@@ -94,13 +47,17 @@ class AppleFinder(CYLGame):
         self.objects = []
         self.turns = 0
         self.level = 0
-        self.msgs = ["Welcome to "+self.GAME_TITLE+"!!!", "Try to eat as many apples as possible"]
+        self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT+1, self.SCREEN_WIDTH - self.MSG_START, 5)
+        self.status_panel = StatusPanel(0, self.MAP_HEIGHT+1, self.MSG_START, 5)
+        self.panels = [self.msg_panel, self.status_panel]
+        self.msg_panel.add("Welcome to "+self.GAME_TITLE+"!!!")
+        self.msg_panel.add("Try to eat as many apples as possible")
 
         self.__create_map()
 
     def __create_map(self):
-        # self.map = [[self.EMPTY] * self.MAP_WIDTH for _ in range(self.MAP_HEIGHT)]
-        self.map = Map(self.EMPTY)
+        self.map = MapPanel(0, 0, self.MAP_WIDTH, self.MAP_HEIGHT, self.EMPTY)
+        self.panels += [self.map]
 
         self.map[(self.player_pos[0], self.player_pos[1])] = self.PLAYER
 
@@ -145,7 +102,8 @@ class AppleFinder(CYLGame):
         if self.map[(self.player_pos[0], self.player_pos[1])] == self.APPLE:
             self.apples_eaten += 1
             self.apples_left -= 1
-            self.msgs += [random.choice(list(set(self.APPLE_EATING_RESPONSES)-set(self.msgs[-3:])))]
+            self.msg_panel += [random.choice(list(set(self.APPLE_EATING_RESPONSES) - set(self.msg_panel.get_current_messages())))]
+            # self.msgs += []
         elif self.map[(self.player_pos[0], self.player_pos[1])] == self.PIT:
             self.in_pit = True
         self.map[(self.player_pos[0], self.player_pos[1])] = self.PLAYER
@@ -217,44 +175,29 @@ class AppleFinder(CYLGame):
         # End of the game
         if self.turns >= self.MAX_TURNS:
             self.running = False
-            self.msgs += ["You are out of moves."]
+            # self.msgs += ["You are out of moves."]
+            self.msg_panel.add("You are out of moves.")
         elif self.in_pit:
             self.running = False
-            self.msgs += ["You fell into a pit :("]
+            self.msg_panel += ["You fell into a pit :("]
 
         if not self.running:
             if self.apples_eaten == 0:
-                self.msgs += ["You ate "+str(self.apples_eaten)+" apples. Better luck next time :("]
+                self.msg_panel += ["You ate "+str(self.apples_eaten)+" apples. Better luck next time :("]
             else:
-                self.msgs += ["You ate "+str(self.apples_eaten)+" apples. Good job!"]
+                self.msg_panel += ["You ate "+str(self.apples_eaten)+" apples. Good job!"]
 
         libtcod.console_set_default_foreground(console, libtcod.white)
-        for pos, char in self.map.get_diff().iteritems():
-            libtcod.console_put_char(console, pos[0], pos[1], char, libtcod.BKGND_NONE)
-        # for x in range(self.MAP_WIDTH):
-        #     for y in range(self.MAP_HEIGHT):
 
         # print line
         for x in range(self.SCREEN_WIDTH):
             libtcod.console_put_char(console, x, self.MAP_HEIGHT, '-')
 
-        # print apple count
-        msg_str = "Apples: " + str(self.apples_eaten)
-        for i in range(len(msg_str)):
-            libtcod.console_put_char(console, 2+i, self.MAP_HEIGHT + 2, msg_str[i])
+        self.status_panel["Apples"] = self.apples_eaten
+        self.status_panel["Move"] = str(self.turns) + " of " + str(self.MAX_TURNS)
 
-        # print turn count
-        msg_str = "Move: " + str(self.turns) + " of " + str(self.MAX_TURNS)
-        for i in range(len(msg_str)):
-            libtcod.console_put_char(console, 2+i, self.MAP_HEIGHT + 3, msg_str[i])
-
-        for j in range(len(self.msgs[-3:])):
-            # Clear msg board
-            for i in range(self.MAX_MSG_LEN):
-                libtcod.console_put_char(console, self.MSG_START+i, self.MAP_HEIGHT+2+j, self.EMPTY)
-            # Print msg
-            for i in range(min(len(self.msgs[-3:][j]), self.MAX_MSG_LEN)):
-                libtcod.console_put_char(console, self.MSG_START+i, self.MAP_HEIGHT+2+j, self.msgs[-3:][j][i])
+        for panel in self.panels:
+            panel.redraw(libtcod, console)
 
 
 if __name__ == '__main__':
@@ -263,5 +206,5 @@ if __name__ == '__main__':
     elif sys.argv[1] == "serve":
         serve(AppleFinder, 'http://131.212.149.197:5000/', host='0.0.0.0')
     elif sys.argv[1] == "play":
-        from CYLGameServer import CYLGameRunner
+        from CYLGame import CYLGameRunner
         CYLGameRunner(AppleFinder).run()
