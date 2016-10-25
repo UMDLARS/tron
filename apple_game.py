@@ -8,6 +8,9 @@ from CYLGame import CYLGame
 from CYLGame import MessagePanel
 from CYLGame import MapPanel
 from CYLGame import StatusPanel
+from CYLGame import PanelBorder
+from CYLGame import ColoredChar
+# from CYLGame import PanelPadding
 
 
 class AppleFinder(CYLGame):
@@ -31,7 +34,7 @@ class AppleFinder(CYLGame):
     MAX_TURNS = 200
 
     PLAYER = '@'
-    APPLE = 'O'
+    APPLE = ColoredChar('O', (255, 0, 0))
     EMPTY = ' '
     PIT = '^'
 
@@ -56,7 +59,8 @@ class AppleFinder(CYLGame):
         self.__create_map()
 
     def __create_map(self):
-        self.map = MapPanel(0, 0, self.MAP_WIDTH, self.MAP_HEIGHT, self.EMPTY)
+        self.map = MapPanel(0, 0, self.MAP_WIDTH, self.MAP_HEIGHT+1, self.EMPTY,
+                            border=PanelBorder.create(bottom="-"))
         self.panels += [self.map]
 
         self.map[(self.player_pos[0], self.player_pos[1])] = self.PLAYER
@@ -175,7 +179,6 @@ class AppleFinder(CYLGame):
         # End of the game
         if self.turns >= self.MAX_TURNS:
             self.running = False
-            # self.msgs += ["You are out of moves."]
             self.msg_panel.add("You are out of moves.")
         elif self.in_pit:
             self.running = False
@@ -189,10 +192,7 @@ class AppleFinder(CYLGame):
 
         libtcod.console_set_default_foreground(console, libtcod.white)
 
-        # print line
-        for x in range(self.SCREEN_WIDTH):
-            libtcod.console_put_char(console, x, self.MAP_HEIGHT, '-')
-
+        # Update Status
         self.status_panel["Apples"] = self.apples_eaten
         self.status_panel["Move"] = str(self.turns) + " of " + str(self.MAX_TURNS)
 
