@@ -34,7 +34,7 @@ class AppleFinder(CYLGame):
     MAX_TURNS = 200
 
     PLAYER = '@'
-    APPLE = ColoredChar('O', (255, 0, 0))
+    APPLE = 'O'
     EMPTY = ' '
     PIT = '^'
 
