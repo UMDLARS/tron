@@ -2,15 +2,12 @@ from __future__ import print_function
 import sys
 import math
 import random
-from CYLGame import serve
 from CYLGame import CYLGameLanguage
 from CYLGame import CYLGame
 from CYLGame import MessagePanel
 from CYLGame import MapPanel
 from CYLGame import StatusPanel
 from CYLGame import PanelBorder
-from CYLGame import ColoredChar
-# from CYLGame import PanelPadding
 
 
 class AppleFinder(CYLGame):
@@ -31,7 +28,7 @@ class AppleFinder(CYLGame):
     NUM_OF_APPLES = 4
     NUM_OF_PITS_START = 0
     NUM_OF_PITS_PER_LEVEL = 8
-    MAX_TURNS = 200
+    MAX_TURNS = 300
 
     PLAYER = '@'
     APPLE = 'O'
@@ -107,7 +104,6 @@ class AppleFinder(CYLGame):
             self.apples_eaten += 1
             self.apples_left -= 1
             self.msg_panel += [random.choice(list(set(self.APPLE_EATING_RESPONSES) - set(self.msg_panel.get_current_messages())))]
-            # self.msgs += []
         elif self.map[(self.player_pos[0], self.player_pos[1])] == self.PIT:
             self.in_pit = True
         self.map[(self.player_pos[0], self.player_pos[1])] = self.PLAYER
@@ -136,7 +132,6 @@ class AppleFinder(CYLGame):
                         direction[1] = 1
                     elif direction[1] < 0:
                         direction[1] = -1
-                    # Make them ones.
                     apple_pos_dist += [(dist, direction)]
 
         apple_pos_dist.sort()
@@ -148,9 +143,6 @@ class AppleFinder(CYLGame):
     def get_vars_for_bot(self):
         bot_vars = {}
 
-        # get closest apple
-        spots = []
-        # while spots
         x_dir, y_dir = self.find_closest_apple(*self.player_pos)
 
         x_dir_to_char = {-1: ord("a"), 1: ord("d"), 0: 0}
@@ -200,11 +192,27 @@ class AppleFinder(CYLGame):
             panel.redraw(libtcod, console)
 
 
+# TODO: find a good spot for all this code. Maybe a function in CYLGame
 if __name__ == '__main__':
     if len(sys.argv) <= 1:
         print("Run: python game.py serve\n To start web server.\nRun: python game.py play\n To play on this computer.")
+    # TODO: redo this with a real arg parser
     elif sys.argv[1] == "serve":
-        serve(AppleFinder, 'http://131.212.149.197:5000/', host='0.0.0.0')
+        from CYLGame.CYLGameServer import serve
+
+        if "-public" in sys.argv or "-p" in sys.argv:
+            if len(sys.argv) > 2 and sys.argv[2] not in ["-public", "-p"]:
+                hostpath = sys.argv[2]
+            else:
+                from CYLGame.CYLGameServer import get_public_ip
+                hostpath = 'http://' + get_public_ip() + ":5000/"
+            host = '0.0.0.0'
+        else:
+            host = '127.0.0.1'
+            hostpath = 'http://127.0.0.1:5000/'
+
+        print("You are serving the site here:", hostpath)
+        serve(AppleFinder, hostpath, host=host)
     elif sys.argv[1] == "play":
         from CYLGame import CYLGameRunner
         CYLGameRunner(AppleFinder).run()
