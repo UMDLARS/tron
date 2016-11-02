@@ -2,15 +2,15 @@ from __future__ import print_function
 import sys
 import math
 import random
-from CYLGame import CYLGameLanguage
-from CYLGame import CYLGame
+from CYLGame import GameLanguage
+from CYLGame import Game
 from CYLGame import MessagePanel
 from CYLGame import MapPanel
 from CYLGame import StatusPanel
 from CYLGame import PanelBorder
 
 
-class AppleFinder(CYLGame):
+class AppleFinder(Game):
     MAP_WIDTH = 80
     MAP_HEIGHT = 25
     SCREEN_WIDTH = 80
@@ -164,7 +164,7 @@ class AppleFinder(CYLGame):
 
     @staticmethod
     def default_prog_for_bot(language):
-        if language == CYLGameLanguage.LITTLEPY:
+        if language == GameLanguage.LITTLEPY:
             return open("apple_bot.lp", "r").read()
 
     def draw_screen(self, libtcod, console):
@@ -198,13 +198,13 @@ if __name__ == '__main__':
         print("Run: python game.py serve\n To start web server.\nRun: python game.py play\n To play on this computer.")
     # TODO: redo this with a real arg parser
     elif sys.argv[1] == "serve":
-        from CYLGame.CYLGameServer import serve
+        from CYLGame.Server import serve
 
         if "-public" in sys.argv or "-p" in sys.argv:
             if len(sys.argv) > 2 and sys.argv[2] not in ["-public", "-p"]:
                 hostpath = sys.argv[2]
             else:
-                from CYLGame.CYLGameServer import get_public_ip
+                from CYLGame.Server import get_public_ip
                 hostpath = 'http://' + get_public_ip() + ":5000/"
             host = '0.0.0.0'
         else:
@@ -214,5 +214,5 @@ if __name__ == '__main__':
         print("You are serving the site here:", hostpath)
         serve(AppleFinder, hostpath, host=host)
     elif sys.argv[1] == "play":
-        from CYLGame import CYLGameRunner
-        CYLGameRunner(AppleFinder).run()
+        from CYLGame import GameRunner
+        GameRunner(AppleFinder).run()
