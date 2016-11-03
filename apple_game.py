@@ -167,6 +167,9 @@ class AppleFinder(Game):
         if language == GameLanguage.LITTLEPY:
             return open("apple_bot.lp", "r").read()
 
+    def get_score(self):
+        return self.apples_eaten
+
     def draw_screen(self, libtcod, console):
         # End of the game
         if self.turns >= self.MAX_TURNS:
