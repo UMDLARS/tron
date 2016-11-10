@@ -211,11 +211,14 @@ if __name__ == '__main__':
                 from CYLGame.Server import get_public_ip
                 hostpath = 'http://' + get_public_ip() + ":5789/"
             host = '0.0.0.0'
-            port = 5050
+            port = 5000
         else:
+            if len(sys.argv) > 2 and sys.argv[2]:
+                hostpath = sys.argv[2]
+            else:
+                hostpath = 'http://'+host+':'+str(port)+'/'
             host = '127.0.0.1'
-            port = 5050
-            hostpath = 'http://'+host+':'+str(port)+'/'
+            port = 5000
 
         print("You are serving the site here:", hostpath)
         serve(AppleFinder, hostpath, host=host, port=port)
