@@ -1,5 +1,4 @@
 from __future__ import print_function
-import sys
 import math
 import random
 from CYLGame import GameLanguage
@@ -11,18 +10,19 @@ from CYLGame import PanelBorder
 
 
 class AppleFinder(Game):
-    MAP_WIDTH = 80
+    MAP_WIDTH = 60
     MAP_HEIGHT = 25
-    SCREEN_WIDTH = 80
+    SCREEN_WIDTH = 60
     SCREEN_HEIGHT = MAP_HEIGHT + 6
     MSG_START = 20
     MAX_MSG_LEN = SCREEN_WIDTH - MSG_START - 1
-    CHAR_WIDTH = 8
-    CHAR_HEIGHT = 8
+    CHAR_WIDTH = 16
+    CHAR_HEIGHT = 16
     GAME_TITLE = "Apple Hunt"
+    CHAR_SET = "terminal16x16_gs_ro.png"
 
     APPLE_EATING_RESPONSES = ["Yummy!", "That hit the spot!", "Wow!", "Amazing!", "So good!",
-                              "An apple a day keeps the robots away.", "Yummy in the tummy!", "Oh my, that was good!",
+                              "An apple a day keeps the robots away.", "Yummy in the tummy!", #"Oh my, that was good!",
                               "Bon appetit", "Ewwww, I think that one had a worm."]
 
     NUM_OF_APPLES = 4
@@ -195,27 +195,6 @@ class AppleFinder(Game):
             panel.redraw(libtcod, console)
 
 
-# TODO: find a good spot for all this code. Maybe a function in CYLGame
 if __name__ == '__main__':
-    if len(sys.argv) <= 1:
-        print("Run: python game.py serve\n To start web server.\nRun: python game.py play\n To play on this computer.")
-    # TODO: redo this with a real arg parser
-    elif sys.argv[1] == "serve":
-        from CYLGame.Server import serve
-
-        if "-public" in sys.argv or "-p" in sys.argv:
-            if len(sys.argv) > 2 and sys.argv[2] not in ["-public", "-p"]:
-                hostpath = sys.argv[2]
-            else:
-                from CYLGame.Server import get_public_ip
-                hostpath = 'http://' + get_public_ip() + ":5000/"
-            host = '0.0.0.0'
-        else:
-            host = '127.0.0.1'
-            hostpath = 'http://127.0.0.1:5000/'
-
-        print("You are serving the site here:", hostpath)
-        serve(AppleFinder, hostpath, host=host)
-    elif sys.argv[1] == "play":
-        from CYLGame import GameRunner
-        GameRunner(AppleFinder).run()
+    from CYLGame import run
+    run(AppleFinder)
