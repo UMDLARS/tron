@@ -1,5 +1,4 @@
 from __future__ import print_function
-import sys
 import math
 import random
 from CYLGame import GameLanguage
@@ -196,32 +195,6 @@ class AppleFinder(Game):
             panel.redraw(libtcod, console)
 
 
-# TODO: find a good spot for all this code. Maybe a function in CYLGame
 if __name__ == '__main__':
-    if len(sys.argv) <= 1:
-        print("Run: python game.py serve\n To start web server.\nRun: python game.py play\n To play on this computer.")
-    # TODO: redo this with a real arg parser
-    elif sys.argv[1] == "serve":
-        from CYLGame.Server import serve
-
-        if "-public" in sys.argv or "-p" in sys.argv:
-            if len(sys.argv) > 2 and sys.argv[2] not in ["-public", "-p"]:
-                hostpath = sys.argv[2]
-            else:
-                from CYLGame.Server import get_public_ip
-                hostpath = 'http://' + get_public_ip() + ":5789/"
-            host = '0.0.0.0'
-            port = 5000
-        else:
-            if len(sys.argv) > 2 and sys.argv[2]:
-                hostpath = sys.argv[2]
-            else:
-                hostpath = 'http://'+host+':'+str(port)+'/'
-            host = '127.0.0.1'
-            port = 5000
-
-        print("You are serving the site here:", hostpath)
-        serve(AppleFinder, hostpath, host=host, port=port)
-    elif sys.argv[1] == "play":
-        from CYLGame import GameRunner
-        GameRunner(AppleFinder).run()
+    from CYLGame import run
+    run(AppleFinder)
