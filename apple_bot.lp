@@ -1,4 +1,5 @@
 # Apple Example Bot
+# Name: Example Bot
 # You must set move to east, west, south, or north to move in the respective directions.
 # Any invalid move will be taken as no move.
 # LEVEL 1: Two variables you have access to are x_dir and y_dir to the nearest apple
