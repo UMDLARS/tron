@@ -1,6 +1,5 @@
 from __future__ import print_function
 import math
-import random
 from CYLGame import GameLanguage
 from CYLGame import Game
 from CYLGame import MessagePanel
@@ -35,7 +34,8 @@ class AppleFinder(Game):
     EMPTY = ' '
     PIT = '^'
 
-    def __init__(self):
+    def __init__(self, random):
+        self.random = random
         self.running = True
         self.in_pit = False
         centerx = self.MAP_WIDTH / 2
@@ -75,8 +75,8 @@ class AppleFinder(Game):
     def place_objects(self, char, count):
         placed_objects = 0
         while placed_objects < count:
-            x = random.randint(0, self.MAP_WIDTH - 1)
-            y = random.randint(0, self.MAP_HEIGHT - 1)
+            x = self.random.randint(0, self.MAP_WIDTH - 1)
+            y = self.random.randint(0, self.MAP_HEIGHT - 1)
 
             if self.map[(x, y)] == self.EMPTY:
                 self.map[(x, y)] = char
@@ -103,7 +103,7 @@ class AppleFinder(Game):
         if self.map[(self.player_pos[0], self.player_pos[1])] == self.APPLE:
             self.apples_eaten += 1
             self.apples_left -= 1
-            self.msg_panel += [random.choice(list(set(self.APPLE_EATING_RESPONSES) - set(self.msg_panel.get_current_messages())))]
+            self.msg_panel += [self.random.choice(list(set(self.APPLE_EATING_RESPONSES) - set(self.msg_panel.get_current_messages())))]
         elif self.map[(self.player_pos[0], self.player_pos[1])] == self.PIT:
             self.in_pit = True
         self.map[(self.player_pos[0], self.player_pos[1])] = self.PLAYER
