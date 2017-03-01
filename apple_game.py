@@ -151,13 +151,13 @@ class AppleFinder(Game):
         bot_vars = {"x_dir": x_dir_to_char[x_dir], "y_dir": y_dir_to_char[y_dir],
                     "pit_to_east": 0, "pit_to_west": 0, "pit_to_north": 0, "pit_to_south": 0}
 
-        if self.map[((self.player_pos[0]+1)%self.SCREEN_WIDTH, self.player_pos[1])] == self.PIT:
+        if self.map[((self.player_pos[0]+1)%self.MAP_WIDTH, self.player_pos[1])] == self.PIT:
             bot_vars["pit_to_east"] = 1
-        if self.map[((self.player_pos[0]-1)%self.SCREEN_WIDTH, self.player_pos[1])] == self.PIT:
+        if self.map[((self.player_pos[0]-1)%self.MAP_WIDTH, self.player_pos[1])] == self.PIT:
             bot_vars["pit_to_west"] = 1
-        if self.map[(self.player_pos[0], (self.player_pos[1]-1)%self.SCREEN_HEIGHT)] == self.PIT:
+        if self.map[(self.player_pos[0], (self.player_pos[1]-1)%self.MAP_HEIGHT)] == self.PIT:
             bot_vars["pit_to_north"] = 1
-        if self.map[(self.player_pos[0], (self.player_pos[1]+1)%self.SCREEN_HEIGHT)] == self.PIT:
+        if self.map[(self.player_pos[0], (self.player_pos[1]+1)%self.MAP_HEIGHT)] == self.PIT:
             bot_vars["pit_to_south"] = 1
 
         return bot_vars
