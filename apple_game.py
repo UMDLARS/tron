@@ -121,7 +121,7 @@ class AppleFinder(Game):
         for pos in self.map.get_all_pos(self.APPLE):
             for i in range(-1, 2):
                 for j in range(-1, 2):
-                    a_x, a_y = pos[0]+(self.SCREEN_WIDTH*i), pos[1]+(self.SCREEN_HEIGHT*j)
+                    a_x, a_y = pos[0]+(self.MAP_WIDTH*i), pos[1]+(self.MAP_HEIGHT*j)
                     dist = math.sqrt((a_x-x)**2 + (a_y-y)**2)
                     direction = [a_x-x, a_y-y]
                     if direction[0] > 0:
