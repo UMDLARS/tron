@@ -167,6 +167,10 @@ class AppleFinder(Game):
         if language == GameLanguage.LITTLEPY:
             return open("apple_bot.lp", "r").read()
 
+    @staticmethod
+    def get_intro():
+        return open("intro.md", "r").read()
+
     def get_score(self):
         return self.apples_eaten
 
