@@ -174,7 +174,7 @@ class AppleFinder(Game):
     def get_score(self):
         return self.apples_eaten
 
-    def draw_screen(self, libtcod, console):
+    def draw_screen(self, frame_buffer):
         # End of the game
         if self.turns >= self.MAX_TURNS:
             self.running = False
@@ -189,14 +189,12 @@ class AppleFinder(Game):
             else:
                 self.msg_panel += ["You ate "+str(self.apples_eaten)+" apples. Good job!"]
 
-        libtcod.console_set_default_foreground(console, libtcod.white)
-
         # Update Status
         self.status_panel["Apples"] = self.apples_eaten
         self.status_panel["Move"] = str(self.turns) + " of " + str(self.MAX_TURNS)
 
         for panel in self.panels:
-            panel.redraw(libtcod, console)
+            panel.redraw(frame_buffer)
 
 
 if __name__ == '__main__':
