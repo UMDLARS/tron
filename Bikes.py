@@ -4,7 +4,7 @@ import random
 #Values for player start at 230ish
 
 class User:
-    def __init__(self, pos, char, diff=-1):
+    def __init__(self, pos, char):
         self.x = pos[0]
         self.y = pos[1]
         self.path = []
@@ -12,11 +12,8 @@ class User:
         self.prev_char = None
         self.prev_move = None
         self.old = None
-        self.diff = diff
     
-        self.CHAR_START = 240 #USER char repr
-        if diff == -1:
-            self.CHAR_START = 228 #CORRUPTION char repr
+        self.CHAR_START = 228 
     
     def __str__(self):
         return self.char
@@ -88,6 +85,11 @@ class User:
 #Node is the map at a given point in time
 
 class Computer(User):
+    def __init__(self, pos, char, diff):
+        User.__init__(self, pos, char)
+        self.diff = diff
+        self.CHAR_START = 240 #USER char repr
+
     def make_move(self, MAP, MAP_WIDTH, MAP_HEIGHT):
         if self.diff == 0:
             self.random(MAP, MAP_WIDTH, MAP_HEIGHT)
