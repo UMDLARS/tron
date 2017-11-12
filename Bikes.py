@@ -94,7 +94,8 @@ class Computer(User):
         if self.diff == 0:
             self.random(MAP, MAP_WIDTH, MAP_HEIGHT)
         elif self.diff == 1:
-            print "TODO"
+            move = self.better_move(MAP, MAP_WIDTH, MAP_HEIGHT)
+            self.move(move)
         elif self.diff == 2:
             print "TODO"
 
@@ -109,4 +110,70 @@ class Computer(User):
         elif x == 3:
             self.move("EAST")
 
-        
+
+    def get_neighbors(self, m, w, h, pos):
+        nbors = []
+        x = pos[0]
+        y = pos[1]
+        if x - 1 >= 0 :
+            nbors += [(x-1, y)]
+        if x + 1 < h:
+            nbors += [(x+1, y)]
+        if y - 1 >= 0:
+            nbors += [(x, y-1)]
+        if y + 1 < h:
+            nbors += [(x, y+1)]
+        return nbors
+    
+    def better_move(self, tronmap, width, height):
+        visited = self.build_map(tronmap, width, height)
+        pos = [] #Most advantageous move
+        if  self.y - 1 >= 0 and tronmap[(self.x, self.y-1)] == ' ':
+            pos += [("NORTH", self.bfs(visited, width, height, self.x, self.y-1))]  
+        if self.y + 1 < height and tronmap[(self.x, self.y+1)] == ' ':
+            pos += [("SOUTH", self.bfs(visited, width, height, self.x, self.y+1))]  
+        if self.x - 1 >= 0 and tronmap[(self.x-1, self.y)] == ' ':
+            pos += [("WEST", self.bfs(visited, width, height, self.x-1, self.y))]  
+        if self.x + 1 < width and tronmap[(self.x+1, self.y)] == ' ':
+            pos += [("EAST", self.bfs(visited, width, height, self.x+1, self.y))]
+
+        return max(pos, key=lambda i:i[1])[0]
+
+    def build_map(self, tronmap, width, height):
+        visited = {}
+        for i in range(0, height):
+            for j in range(0, width):
+                if tronmap[(j,i)] == ' ': 
+                    visited[(j,i)] = False 
+                else:
+                    visited[(j,i)] = True
+        return visited
+
+    def print_map(self, m, w, h):
+        for i in range(0, h):
+            for j in range(0, w):
+                if visited[(j,i)] == True:
+                    print "X",
+                else:
+                    print ' ',
+            print "/"
+
+    #Gonna use this to evaluate how strong of a position we are in. This will count the open amount of spaces we have which we will use to evaluate which direction the bike should go
+    def bfs(self, m, w, h, x, y):
+        queue = []
+        visited = []
+        path = {} #Not gonna bother with path. 
+        start = (x,y)
+        path[start] = (None, None)
+        queue += [start]
+
+        while queue:
+            cur = queue.pop()
+
+            for i in self.get_neighbors(m, w, h, cur):
+                if not m[i] and i not in visited:
+                    queue += [i]
+
+            visited += [cur]
+
+        return len(visited)

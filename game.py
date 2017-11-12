@@ -33,7 +33,7 @@ class Tron(Game):
         self.CORRUPTION = []
 
         self.turns = 0
-        self.level = 0
+        self.level = 1
         self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT+1, self.SCREEN_WIDTH - self.MSG_START, 5)
         self.status_panel = StatusPanel(0, self.MAP_HEIGHT+1, self.MSG_START, 5)
         self.panels = [self.msg_panel, self.status_panel]
@@ -88,8 +88,7 @@ class Tron(Game):
             self.running = False
         else:   
             self.map[(self.USER.x, self.USER.y)] = self.USER.char
-
-    #    self.spread_corruption()
+        self.spread_corruption()
         
     def spread_corruption(self):
         for i in range(0, self.ENEMIES):
@@ -101,7 +100,7 @@ class Tron(Game):
             cor.x %= self.MAP_WIDTH
             cor.y %= self.MAP_HEIGHT
             if self.map[cor.pos()] != self.EMPTY:
-                for j in cor.derrezed():
+                for j in cor.derezzed():
                     self.map[j] = self.EMPTY
                 cor = None
                 del self.CORRUPTION[i]
