@@ -81,10 +81,11 @@ class Tron(Game):
        
         self.map[self.USER.old] = self.USER.prev_char
 
-        self.USER.x %= self.MAP_WIDTH
-        self.USER.y %= self.MAP_HEIGHT
-
-        if self.map[(self.USER.x, self.USER.y)] != ' ':
+        if self.USER.x == self.MAP_WIDTH or self.USER.x < 0:
+            self.running = False
+        elif self.USER.y == self.MAP_HEIGHT or self.USER.y < 0:
+            self.running = False
+        elif self.map[(self.USER.x, self.USER.y)] != ' ':
             self.running = False
         else:   
             self.map[(self.USER.x, self.USER.y)] = self.USER.char
@@ -98,9 +99,12 @@ class Tron(Game):
             cor.make_move(self.map, self.MAP_WIDTH, self.MAP_HEIGHT)
             
             self.map[cor.old] = cor.prev_char
-            cor.x %= self.MAP_WIDTH
-            cor.y %= self.MAP_HEIGHT
-            if self.map[cor.pos()] != self.EMPTY:
+            derezz = False
+            if cor.x == self.MAP_WIDTH or cor.x < 0:
+                derezz = True
+            if cor.y == self.MAP_HEIGHT or cor.y < 0:
+                derezz = True
+            if self.map[cor.pos()] != self.EMPTY or derezz:
                 for j in cor.derezzed():
                     self.map[j] = self.EMPTY
                 cor = None
