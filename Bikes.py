@@ -136,7 +136,9 @@ class Computer(User):
             pos += [("WEST", self.bfs(visited, width, height, self.x-1, self.y))]  
         if self.x + 1 < width and tronmap[(self.x+1, self.y)] == ' ':
             pos += [("EAST", self.bfs(visited, width, height, self.x+1, self.y))]
-
+        
+        if not pos:
+            return "NORTH" #Gonna die, just pick a direction
         return max(pos, key=lambda i:i[1])[0]
 
     def build_map(self, tronmap, width, height):

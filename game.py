@@ -22,7 +22,7 @@ class Tron(Game):
     
     EMPTY = ' '
 
-    ENEMIES = 1 # start out with 1 staticly allocated. We can move onto random as before but get to that later
+    ENEMIES = 4 # start out with 1 staticly allocated. We can move onto random as before but get to that later
 
     def __init__(self, random):
         self.random = random
@@ -92,8 +92,9 @@ class Tron(Game):
         
     def spread_corruption(self):
         for i in range(0, self.ENEMIES):
+            if self.CORRUPTION[i] == None:
+                continue
             cor = self.CORRUPTION[i]
-            print(cor.pos())
             cor.make_move(self.map, self.MAP_WIDTH, self.MAP_HEIGHT)
             
             self.map[cor.old] = cor.prev_char
@@ -103,7 +104,7 @@ class Tron(Game):
                 for j in cor.derezzed():
                     self.map[j] = self.EMPTY
                 cor = None
-                del self.CORRUPTION[i]
+                self.CORRUPTION[i] = None
                 self.ENEMIES -= 1
                 if self.ENEMIES == 0:
                     self.running = False
