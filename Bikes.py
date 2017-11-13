@@ -40,7 +40,7 @@ class User:
             return self.x == other.x and self.y == other.y
         return False
     
-    def derezzed(self):
+    def derezz(self):
         return self.path
 #I will need to implement an algorithm for the corruption to utilize when making their decisions.
 #A suggested implementation is to use a minimax algorithm. https://www.sifflez.org/misc/tronbot/
@@ -89,6 +89,7 @@ class Computer(User):
         User.__init__(self, pos, char)
         self.diff = diff
         self.CHAR_START = 240 #USER char repr
+        self.derezzed = False
 
     def make_move(self, MAP, MAP_WIDTH, MAP_HEIGHT):
         if self.diff == 0:

@@ -22,7 +22,7 @@ class Tron(Game):
     
     EMPTY = ' '
 
-    ENEMIES = 4 # start out with 1 staticly allocated. We can move onto random as before but get to that later
+    ENEMIES = 3 # start out with 1 staticly allocated. We can move onto random as before but get to that later
 
     def __init__(self, random):
         self.random = random
@@ -31,7 +31,7 @@ class Tron(Game):
     
         self.USER = None
         self.CORRUPTION = []
-
+        self.CORRUPTION_POSITIONS = [] 
         self.turns = 0
         self.level = 1
         self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT+1, self.SCREEN_WIDTH - self.MSG_START, 5)
@@ -62,6 +62,7 @@ class Tron(Game):
                     self.USER = User((x,y), chr(239))
                 else:
                     self.CORRUPTION += [Computer((x,y), chr(234), self.level)]
+                    self.CORRUPTION_POSITIONS += [(x,y)]
                 
 
     def handle_key(self, key):
@@ -92,28 +93,31 @@ class Tron(Game):
         self.spread_corruption()
         
     def spread_corruption(self):
-        for i in range(0, self.ENEMIES):
-            if self.CORRUPTION[i] == None:
-                continue
+        collision = []
+        for i in range(0, len(self.CORRUPTION)):
             cor = self.CORRUPTION[i]
+            if cor.derezzed == True:
+                continue
             cor.make_move(self.map, self.MAP_WIDTH, self.MAP_HEIGHT)
             
             self.map[cor.old] = cor.prev_char
             derezz = False
             if cor.x == self.MAP_WIDTH or cor.x < 0:
-                derezz = True
-            if cor.y == self.MAP_HEIGHT or cor.y < 0:
-                derezz = True
-            if self.map[cor.pos()] != self.EMPTY or derezz:
-                for j in cor.derezzed():
+                cor.derezzed = True
+            elif cor.y == self.MAP_HEIGHT or cor.y < 0:
+                cor.derezzed = True
+            elif cor.pos() in self.CORRUPTION_POSITIONS:
+                cor.derezzed = True
+            elif self.map[cor.pos()] != self.EMPTY or cor.derezzed:
+                for j in cor.derezz():
                     self.map[j] = self.EMPTY
-                cor = None
-                self.CORRUPTION[i] = None
-                self.ENEMIES -= 1
-                if self.ENEMIES == 0:
-                    self.running = False
+                cor.derezzed = True
+                self.enemies -= 1
             else:
                 self.map[cor.pos()] = cor.char
+                self.CORRUPTION_POSITIONS[i] = cor.pos()
+        if self.ENEMIES == 0:
+            self.running = False
 
     def is_running(self):
         return self.running
