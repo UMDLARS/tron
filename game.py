@@ -53,12 +53,12 @@ class Tron(Game):
         self.map[self.USER.pos()] = self.USER.char
     
     def place_bikes(self):
-        for i in range(0, self.ENEMIES+1):
+        for i in range(0, self.NUM_ENEMIES+1):
             x = self.random.randint(0, self.MAP_WIDTH - 1)
             y = self.random.randint(0, self.MAP_HEIGHT - 1)
 
             if self.map[(x,y)] == self.EMPTY:
-                if i == self.ENEMIES:
+                if i == self.NUM_ENEMIES:
                     self.USER = User((x,y), chr(239))
                 else:
                     self.CORRUPTION += [Computer((x,y), chr(234), self.level)]
