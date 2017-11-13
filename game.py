@@ -9,9 +9,9 @@ from CYLGame import PanelBorder
 from Bikes import *
 
 class Tron(Game):
-    MAP_WIDTH = 60
-    MAP_HEIGHT = 25
-    SCREEN_WIDTH = 60
+    MAP_WIDTH = 40
+    MAP_HEIGHT = 20
+    SCREEN_WIDTH = 45
     SCREEN_HEIGHT = MAP_HEIGHT + 6
     MSG_START = 20
     MAX_MSG_LEN = SCREEN_WIDTH - MSG_START - 1
@@ -22,12 +22,12 @@ class Tron(Game):
     
     EMPTY = ' '
 
-    ENEMIES = 3 # start out with 1 staticly allocated. We can move onto random as before but get to that later
+    NUM_ENEMIES = 3 # start out with 1 staticly allocated. We can move onto random as before but get to that later
 
     def __init__(self, random):
         self.random = random
         self.running = True
-        self.enemies = self.ENEMIES       
+        self.enemies = self.NUM_ENEMIES       
     
         self.USER = None
         self.CORRUPTION = []
@@ -37,7 +37,7 @@ class Tron(Game):
         self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT+1, self.SCREEN_WIDTH - self.MSG_START, 5)
         self.status_panel = StatusPanel(0, self.MAP_HEIGHT+1, self.MSG_START, 5)
         self.panels = [self.msg_panel, self.status_panel]
-        self.msg_panel.add("Welcome to "+self.GAME_TITLE+"!!!")
+        self.msg_panel.add("Welcome to Game GRID!!!")
         self.msg_panel.add("Stop The Corruption")
 
         self.__create_map()
@@ -81,7 +81,6 @@ class Tron(Game):
             return
        
         self.map[self.USER.old] = self.USER.prev_char
-
         if self.USER.x == self.MAP_WIDTH or self.USER.x < 0:
             self.running = False
         elif self.USER.y == self.MAP_HEIGHT or self.USER.y < 0:
@@ -101,23 +100,30 @@ class Tron(Game):
             cor.make_move(self.map, self.MAP_WIDTH, self.MAP_HEIGHT)
             
             self.map[cor.old] = cor.prev_char
-            derezz = False
             if cor.x == self.MAP_WIDTH or cor.x < 0:
-                cor.derezzed = True
+                self.derezz(i)
             elif cor.y == self.MAP_HEIGHT or cor.y < 0:
-                cor.derezzed = True
+                self.derezz(i)
             elif cor.pos() in self.CORRUPTION_POSITIONS:
-                cor.derezzed = True
-            elif self.map[cor.pos()] != self.EMPTY or cor.derezzed:
-                for j in cor.derezz():
-                    self.map[j] = self.EMPTY
-                cor.derezzed = True
-                self.enemies -= 1
+                self.derezz(i)
+                self.derezz(self.CORRUPTION_POSITIONS.index(cor.pos()))
+            elif cor.pos() == self.USER.pos():
+                self.running = False #User collision, failure
+            elif self.map[cor.pos()] != self.EMPTY:
+                self.derezz(i)
             else:
                 self.map[cor.pos()] = cor.char
                 self.CORRUPTION_POSITIONS[i] = cor.pos()
-        if self.ENEMIES == 0:
+        if self.enemies== 0:
             self.running = False
+
+    def derezz(self, cor_ind):
+        cor = self.CORRUPTION[cor_ind]
+        for j in cor.derezz():
+            self.map[j] = self.EMPTY
+        cor.derezzed = True
+        self.enemies -= 1
+
 
     def is_running(self):
         return self.running
@@ -140,7 +146,7 @@ class Tron(Game):
 
         if not self.running:
             if self.enemies > 0:
-                self.msg_panel += ["The Corruption has spread to the system. Critical Failure"]
+                self.msg_panel += ["END OF LINE"]
             else:
                 self.msg_panel += ["Corruption progress has stopped Exit(0)"]
 
