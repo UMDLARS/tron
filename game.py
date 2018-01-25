@@ -24,6 +24,8 @@ class Tron(GridGame):
     
     EMPTY = ' '
 
+    NUM_ENEMIES = 8 # start out with 1 staticly allocated. We can move onto random as before but get to that later
+
     def __init__(self, random):
         self.random = random
         self.running = True
@@ -40,7 +42,7 @@ class Tron(GridGame):
 
     def init_board(self):
         self.map = MapPanel(0, 0, self.MAP_WIDTH, self.MAP_HEIGHT+1, self.EMPTY,
-                            border=PanelBorder.create(bottom="-"))
+                            border=PanelBorder.create(bottom="-", left="|", right="|", top="="))
         self.panels += [self.map]
 
     def create_new_player(self, prog):
@@ -60,6 +62,7 @@ class Tron(GridGame):
 
     def do_turn(self):
         self.turns += 1
+        collision = []
 
         self.num_alive = 0
         for player in self.players:
