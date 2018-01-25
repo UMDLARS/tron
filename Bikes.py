@@ -4,6 +4,7 @@ import random
 #Values for player start at 230ish
 
 class User:
+    ILLEGAL_CHARS = ["|", "=", "-"]
     def __init__(self, pos, char):
         self.x = pos[0]
         self.y = pos[1]

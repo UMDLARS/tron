@@ -9,10 +9,8 @@ from CYLGame import PanelBorder
 from Bikes import *
 
 class Tron(Game):
-    MAP_WIDTH = 40
-    MAP_HEIGHT = 20
-    SCREEN_WIDTH = 45
-    SCREEN_HEIGHT = MAP_HEIGHT + 6
+    MAP_WIDTH = 40 #TRUE DIMENSIONS
+    MAP_HEIGHT = 20#TRUE DIMENSIONS
     MSG_START = 20
     MAX_MSG_LEN = SCREEN_WIDTH - MSG_START - 1
     CHAR_WIDTH = 16
@@ -22,7 +20,7 @@ class Tron(Game):
     
     EMPTY = ' '
 
-    NUM_ENEMIES = 3 # start out with 1 staticly allocated. We can move onto random as before but get to that later
+    NUM_ENEMIES = 8 # start out with 1 staticly allocated. We can move onto random as before but get to that later
 
     def __init__(self, random):
         self.random = random
@@ -44,7 +42,7 @@ class Tron(Game):
 
     def __create_map(self):
         self.map = MapPanel(0, 0, self.MAP_WIDTH, self.MAP_HEIGHT+1, self.EMPTY,
-                            border=PanelBorder.create(bottom="-"))
+                            border=PanelBorder.create(bottom="-", left="|", right="|", top="="))
         self.panels += [self.map]
 
         self.place_bikes()
@@ -54,15 +52,17 @@ class Tron(Game):
     
     def place_bikes(self):
         for i in range(0, self.NUM_ENEMIES+1):
-            x = self.random.randint(0, self.MAP_WIDTH - 1)
-            y = self.random.randint(0, self.MAP_HEIGHT - 1)
-
-            if self.map[(x,y)] == self.EMPTY:
-                if i == self.NUM_ENEMIES:
-                    self.USER = User((x,y), chr(239))
-                else:
-                    self.CORRUPTION += [Computer((x,y), chr(234), self.level)]
-                    self.CORRUPTION_POSITIONS += [(x,y)]
+            while True:
+                x = self.random.randint(self.map.x+1, self.map.w-1)
+                y = self.random.randint(self.map.y+1, self.map.h-1)
+                
+                if self.map[(x,y)] == self.EMPTY:
+                    if i == self.NUM_ENEMIES:
+                        self.USER = User((x,y), chr(239))
+                    else:
+                        self.CORRUPTION += [Computer((x,y), chr(234), self.level)]
+                        self.CORRUPTION_POSITIONS += [(x,y)]
+                    break;
                 
 
     def handle_key(self, key):
@@ -81,9 +81,9 @@ class Tron(Game):
             return
        
         self.map[self.USER.old] = self.USER.prev_char
-        if self.USER.x == self.MAP_WIDTH or self.USER.x < 0:
+        if self.USER.x == self.map.w or self.USER.x < self.map.x:
             self.running = False
-        elif self.USER.y == self.MAP_HEIGHT or self.USER.y < 0:
+        elif self.USER.y == self.map.h or self.USER.y < self.map.y:
             self.running = False
         elif self.map[(self.USER.x, self.USER.y)] != ' ':
             self.running = False
@@ -97,12 +97,12 @@ class Tron(Game):
             cor = self.CORRUPTION[i]
             if cor.derezzed == True:
                 continue
-            cor.make_move(self.map, self.MAP_WIDTH, self.MAP_HEIGHT)
+            cor.make_move(self.map, self.map.w, self.map.h)
             
             self.map[cor.old] = cor.prev_char
-            if cor.x == self.MAP_WIDTH or cor.x < 0:
+            if cor.x == self.map.w or cor.x < self.map.x:
                 self.derezz(i)
-            elif cor.y == self.MAP_HEIGHT or cor.y < 0:
+            elif cor.y == self.map.h or cor.y < self.map.y:
                 self.derezz(i)
             elif cor.pos() in self.CORRUPTION_POSITIONS:
                 self.derezz(i)
