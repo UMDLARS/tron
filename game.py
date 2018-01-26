@@ -20,6 +20,10 @@ class Tron(GridGame):
     CHAR_HEIGHT = 16
     GAME_TITLE = "TRON"
     CHAR_SET = "tron16x16_gs_ro.png"
+   
+    TAKEN = 8912
+    OPEN = 12312
+    WALL = 323423
     MULTIPLAYER = True
     
     EMPTY = ' '
@@ -125,7 +129,25 @@ class Tron(GridGame):
         for panel in self.panels:
             panel.redraw(frame_buffer)
     
+    def read_bot_state(self, state):
+        self.sensor_coords = []
+        for i in range(7):
+            x_name = "s" + str(i + 1) + "x"
+            y_name = "s" + str(i + 1) + "y"
+            self.sensor_coords.append((state.get(x_name, "0"), state.get(y_name, "0")))
+
     def get_vars_for_bot(self):
+        bot_vars = {}
+        for i in range(0,len(self.sensor_coords)):
+            if self.USER.x + ord(self.sensor_coords[i][0]) > self.map.w or self.USER.x + ord(self.sensor_coords[i][0]) < self.map.x:
+                bot_vars["s"+str(i)] = self.WALL
+            elif self.USER.y + ord(self.sensor_coords[i][1]) > self.map.w or self.USER.y + ord(self.sensor_coords[i][1]) < self.map.x:
+                bot_vars["s"+str(i)] = self.WALL 
+            else:
+                if self.map[(self.USER.x + ord(self.sensor_coords[i][0]), self.USER.x + ord(self.sensor_coords[i][1]))] == ' ':
+                    bot_vars["s"+str(i)] = self.OPEN
+                else:
+                    bot_vars["s"+str(i)] = self.TAKEN
         return {}
 
     def get_vars(self, player):
