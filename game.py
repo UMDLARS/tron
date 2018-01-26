@@ -9,10 +9,12 @@ from CYLGame import PanelBorder
 from Bikes import *
 
 class Tron(Game):
-    MAP_WIDTH = 40 #TRUE DIMENSIONS
-    MAP_HEIGHT = 20#TRUE DIMENSIONS
-    MSG_START = 20
-    MAX_MSG_LEN = SCREEN_WIDTH - MSG_START - 1
+    SCREEN_WIDTH = 60
+    SCREEN_HEIGHT = 50
+    MAP_WIDTH = 40  #TRUE DIMENSIONS
+    MAP_HEIGHT = 30 #TRUE DIMENSIONS
+    MSG_START = 30
+    MAX_MSG_LEN = MAP_WIDTH - MSG_START - 1
     CHAR_WIDTH = 16
     CHAR_HEIGHT = 16
     GAME_TITLE = "TRON"
@@ -20,13 +22,12 @@ class Tron(Game):
     
     EMPTY = ' '
 
-    NUM_ENEMIES = 8 # start out with 1 staticly allocated. We can move onto random as before but get to that later
 
     def __init__(self, random):
         self.random = random
         self.running = True
-        self.enemies = self.NUM_ENEMIES       
-    
+        self.NUM_ENEMIES=2
+        self.enemies = self.NUM_ENEMIES
         self.USER = None
         self.CORRUPTION = []
         self.CORRUPTION_POSITIONS = [] 
@@ -42,7 +43,7 @@ class Tron(Game):
 
     def __create_map(self):
         self.map = MapPanel(0, 0, self.MAP_WIDTH, self.MAP_HEIGHT+1, self.EMPTY,
-                            border=PanelBorder.create(bottom="-", left="|", right="|", top="="))
+                            border=PanelBorder.create(bottom=True, left=True, right=True, top=True))
         self.panels += [self.map]
 
         self.place_bikes()
@@ -57,7 +58,7 @@ class Tron(Game):
                 y = self.random.randint(self.map.y+1, self.map.h-1)
                 
                 if self.map[(x,y)] == self.EMPTY:
-                    if i == self.NUM_ENEMIES:
+                    if i == self.enemies:
                         self.USER = User((x,y), chr(239))
                     else:
                         self.CORRUPTION += [Computer((x,y), chr(234), self.level)]
@@ -81,9 +82,9 @@ class Tron(Game):
             return
        
         self.map[self.USER.old] = self.USER.prev_char
-        if self.USER.x == self.map.w or self.USER.x < self.map.x:
+        if self.USER.x == self.map.w or self.USER.x < self.map.x-1:
             self.running = False
-        elif self.USER.y == self.map.h or self.USER.y < self.map.y:
+        elif self.USER.y == self.map.h or self.USER.y < self.map.y-1:
             self.running = False
         elif self.map[(self.USER.x, self.USER.y)] != ' ':
             self.running = False
@@ -155,6 +156,9 @@ class Tron(Game):
         self.status_panel["Turns"] = str(self.turns)
         for panel in self.panels:
             panel.redraw(frame_buffer)
+    
+    def get_vars_for_bot(self):
+        return {}
 
 
 if __name__ == '__main__':

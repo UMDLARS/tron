@@ -130,11 +130,11 @@ class Computer(User):
     def better_move(self, tronmap, width, height):
         visited = self.build_map(tronmap, width, height)
         pos = [] #Most advantageous move
-        if  self.y - 1 >= 0 and tronmap[(self.x, self.y-1)] == ' ':
+        if  self.y - 1 >= 1 and tronmap[(self.x, self.y-1)] == ' ':
             pos += [("NORTH", self.bfs(visited, width, height, self.x, self.y-1))]  
         if self.y + 1 < height and tronmap[(self.x, self.y+1)] == ' ':
             pos += [("SOUTH", self.bfs(visited, width, height, self.x, self.y+1))]  
-        if self.x - 1 >= 0 and tronmap[(self.x-1, self.y)] == ' ':
+        if self.x - 1 >= 1 and tronmap[(self.x-1, self.y)] == ' ':
             pos += [("WEST", self.bfs(visited, width, height, self.x-1, self.y))]  
         if self.x + 1 < width and tronmap[(self.x+1, self.y)] == ' ':
             pos += [("EAST", self.bfs(visited, width, height, self.x+1, self.y))]
