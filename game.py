@@ -19,13 +19,17 @@ class Tron(Game):
     CHAR_HEIGHT = 16
     GAME_TITLE = "TRON"
     CHAR_SET = "tron16x16_gs_ro.png"
-    
+   
+    TAKEN = 8912
+    OPEN = 12312
+    WALL = 323423
     EMPTY = ' '
 
 
     def __init__(self, random):
         self.random = random
         self.running = True
+        self.DEREZZED = False
         self.NUM_ENEMIES=2
         self.enemies = self.NUM_ENEMIES
         self.USER = None
@@ -67,6 +71,8 @@ class Tron(Game):
                 
 
     def handle_key(self, key):
+        if self.DEREZZED:
+            return
         self.turns += 1
          
         if key == "w":
@@ -78,16 +84,18 @@ class Tron(Game):
         if key == "d":
             self.USER.move("EAST")
         if key == "Q":
-            self.running = False
+            self.DEREZZED = True
             return
-       
         self.map[self.USER.old] = self.USER.prev_char
-        if self.USER.x == self.map.w or self.USER.x < self.map.x-1:
-            self.running = False
-        elif self.USER.y == self.map.h or self.USER.y < self.map.y-1:
-            self.running = False
+        if self.USER.x >= self.map.w or self.USER.x < self.map.x:
+            self.DEREZZED = True
+            return
+        elif self.USER.y >= self.map.h or self.USER.y < self.map.y:
+            self.DEREZZED = True
+            return
         elif self.map[(self.USER.x, self.USER.y)] != ' ':
-            self.running = False
+            self.DEREZZED = True
+            return
         else:   
             self.map[(self.USER.x, self.USER.y)] = self.USER.char
         self.spread_corruption()
@@ -109,14 +117,16 @@ class Tron(Game):
                 self.derezz(i)
                 self.derezz(self.CORRUPTION_POSITIONS.index(cor.pos()))
             elif cor.pos() == self.USER.pos():
-                self.running = False #User collision, failure
+                self.DEREZZED = True
+                return
             elif self.map[cor.pos()] != self.EMPTY:
                 self.derezz(i)
             else:
                 self.map[cor.pos()] = cor.char
                 self.CORRUPTION_POSITIONS[i] = cor.pos()
         if self.enemies== 0:
-            self.running = False
+            self.DEREZZED = True
+            return
 
     def derezz(self, cor_ind):
         cor = self.CORRUPTION[cor_ind]
@@ -145,11 +155,12 @@ class Tron(Game):
     def draw_screen(self, frame_buffer):
         # End of the game
 
-        if not self.running:
+        if self.DEREZZED:
             if self.enemies > 0:
-                self.msg_panel += ["END OF LINE"]
+                self.msg_panel.add("END OF LINE")
             else:
-                self.msg_panel += ["Corruption progress has stopped Exit(0)"]
+                self.msg_panel.add("Corruption progress has stopped Exit(0)")
+            self.running = False
 
         # Update Status
         self.status_panel["Enemies"] = str(self.enemies) + " left"
@@ -157,7 +168,25 @@ class Tron(Game):
         for panel in self.panels:
             panel.redraw(frame_buffer)
     
+    def read_bot_state(self, state):
+        self.sensor_coords = []
+        for i in range(7):
+            x_name = "s" + str(i + 1) + "x"
+            y_name = "s" + str(i + 1) + "y"
+            self.sensor_coords.append((state.get(x_name, "0"), state.get(y_name, "0")))
+
     def get_vars_for_bot(self):
+        bot_vars = {}
+        for i in range(0,len(self.sensor_coords)):
+            if self.USER.x + ord(self.sensor_coords[i][0]) > self.map.w or self.USER.x + ord(self.sensor_coords[i][0]) < self.map.x:
+                bot_vars["s"+str(i)] = self.WALL
+            elif self.USER.y + ord(self.sensor_coords[i][1]) > self.map.w or self.USER.y + ord(self.sensor_coords[i][1]) < self.map.x:
+                bot_vars["s"+str(i)] = self.WALL 
+            else:
+                if self.map[(self.USER.x + ord(self.sensor_coords[i][0]), self.USER.x + ord(self.sensor_coords[i][1]))] == ' ':
+                    bot_vars["s"+str(i)] = self.OPEN
+                else:
+                    bot_vars["s"+str(i)] = self.TAKEN
         return {}
 
 
