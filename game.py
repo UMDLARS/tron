@@ -22,16 +22,12 @@ class Tron(Game):
     
     EMPTY = ' '
 
-    NUM_ENEMIES = 3 # start out with 1 staticly allocated. We can move onto random as before but get to that later
-
     def __init__(self, random):
         self.random = random
         self.running = True
-        self.enemies = self.NUM_ENEMIES       
-    
-        self.USER = None
-        self.CORRUPTION = []
-        self.CORRUPTION_POSITIONS = [] 
+        self.players = []
+        self.num_alive = 0
+
         self.turns = 0
         self.level = 1
         self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT+1, self.SCREEN_WIDTH - self.MSG_START, 5)
@@ -47,82 +43,44 @@ class Tron(Game):
                             border=PanelBorder.create(bottom="-"))
         self.panels += [self.map]
 
-        self.place_bikes()
-        for i in self.CORRUPTION:
-            self.map[i.pos()] = i.char
-        self.map[self.USER.pos()] = self.USER.char
+    def get_new_player(self, prog):
+        self.players += [self.place_bike(prog)]
+        player = self.players[-1]
+        self.map[player.pos()] = player.char
+        return player
     
-    def place_bikes(self):
-        for i in range(0, self.NUM_ENEMIES+1):
+    def place_bike(self, prog):
+        while True:
             x = self.random.randint(0, self.MAP_WIDTH - 1)
             y = self.random.randint(0, self.MAP_HEIGHT - 1)
 
-            if self.map[(x,y)] == self.EMPTY:
-                if i == self.NUM_ENEMIES:
-                    self.USER = User((x,y), chr(239))
-                else:
-                    self.CORRUPTION += [Computer((x,y), chr(234), self.level)]
-                    self.CORRUPTION_POSITIONS += [(x,y)]
-                
+            if self.map[(x, y)] == self.EMPTY:
+                return Bike((x, y), chr(239), prog)
 
-    def handle_key(self, key):
+    def update(self):
         self.turns += 1
-         
-        if key == "w":
-            self.USER.move("NORTH")
-        if key == "s":
-            self.USER.move("SOUTH")
-        if key == "a":
-            self.USER.move("WEST")
-        if key == "d":
-            self.USER.move("EAST")
-        if key == "Q":
-            self.running = False
-            return
-       
-        self.map[self.USER.old] = self.USER.prev_char
-        if self.USER.x == self.MAP_WIDTH or self.USER.x < 0:
-            self.running = False
-        elif self.USER.y == self.MAP_HEIGHT or self.USER.y < 0:
-            self.running = False
-        elif self.map[(self.USER.x, self.USER.y)] != ' ':
-            self.running = False
-        else:   
-            self.map[(self.USER.x, self.USER.y)] = self.USER.char
-        self.spread_corruption()
-        
-    def spread_corruption(self):
-        collision = []
-        for i in range(0, len(self.CORRUPTION)):
-            cor = self.CORRUPTION[i]
-            if cor.derezzed == True:
-                continue
-            cor.make_move(self.map, self.MAP_WIDTH, self.MAP_HEIGHT)
-            
-            self.map[cor.old] = cor.prev_char
-            if cor.x == self.MAP_WIDTH or cor.x < 0:
-                self.derezz(i)
-            elif cor.y == self.MAP_HEIGHT or cor.y < 0:
-                self.derezz(i)
-            elif cor.pos() in self.CORRUPTION_POSITIONS:
-                self.derezz(i)
-                self.derezz(self.CORRUPTION_POSITIONS.index(cor.pos()))
-            elif cor.pos() == self.USER.pos():
-                self.running = False #User collision, failure
-            elif self.map[cor.pos()] != self.EMPTY:
-                self.derezz(i)
-            else:
-                self.map[cor.pos()] = cor.char
-                self.CORRUPTION_POSITIONS[i] = cor.pos()
-        if self.enemies== 0:
-            self.running = False
 
-    def derezz(self, cor_ind):
-        cor = self.CORRUPTION[cor_ind]
-        for j in cor.derezz():
+        self.num_alive = 0
+        for player in self.players:
+            if not player.derezzed:
+                self.map[player.old] = player.prev_char
+                if player.x == self.MAP_WIDTH or player.x < 0:
+                    player.derezzed = True
+                elif player.y == self.MAP_HEIGHT or player.y < 0:
+                    player.derezzed = True
+                elif self.map[(player.x, player.y)] != ' ':
+                    player.derezzed = True
+                else:
+                    self.map[(player.x, player.y)] = player.char
+                if player.derezzed:
+                    self.derezz(player)
+                else:
+                    self.num_alive += 1
+
+    def derezz(self, bike):
+        for j in bike.path:
             self.map[j] = self.EMPTY
-        cor.derezzed = True
-        self.enemies -= 1
+        bike.derezzed = True
 
 
     def is_running(self):
@@ -144,14 +102,16 @@ class Tron(Game):
     def draw_screen(self, frame_buffer):
         # End of the game
 
-        if not self.running:
-            if self.enemies > 0:
-                self.msg_panel += ["END OF LINE"]
-            else:
-                self.msg_panel += ["Corruption progress has stopped Exit(0)"]
+        if self.num_alive == 1:
+            self.msg_panel.add("Player {} Won!".format([x for x in range(len(self.players)) if not self.players[x].derezzed][0]))
+            self.running = False
+            # if self.enemies > 0:
+            #     self.msg_panel += ["END OF LINE"]
+            # else:
+            #     self.msg_panel += ["Corruption progress has stopped Exit(0)"]
 
         # Update Status
-        self.status_panel["Enemies"] = str(self.enemies) + " left"
+        self.status_panel["Enemies"] = str(self.num_alive-1) + " left"
         self.status_panel["Turns"] = str(self.turns)
         for panel in self.panels:
             panel.redraw(frame_buffer)
