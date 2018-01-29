@@ -26,7 +26,7 @@ class Bike(DefaultGridPlayer):
     def pos(self):
         return (self.x, self.y)
 
-    def move(self, direct):
+    def do_move(self, direct):
         self.old = (self.x, self.y)
         self.path += [self.old]
         if direct == "NORTH":
@@ -90,17 +90,17 @@ class Bike(DefaultGridPlayer):
 
     def update_state(self, state):
         super(Bike, self).update_state(state)
-        move = chr(state.get("move", ord("Q")))
+        # move = chr(state.get("move", ord("Q")))
 
-        if move == "w":
-            self.move("NORTH")
-        if move == "s":
-            self.move("SOUTH")
-        if move == "a":
-            self.move("WEST")
-        if move == "d":
-            self.move("EAST")
-        if move == "Q":  # Should this be an else statement. Then any invalid input is the same as quiting.
+        if self.move == "w":
+            self.do_move("NORTH")
+        if self.move == "s":
+            self.do_move("SOUTH")
+        if self.move == "a":
+            self.do_move("WEST")
+        if self.move == "d":
+            self.do_move("EAST")
+        if self.move == "Q":  # Should this be an else statement. Then any invalid input is the same as quiting.
             self.derezzed = True
 
 
