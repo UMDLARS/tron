@@ -3,7 +3,7 @@ import random
 #Values for Orange PNG start at 240
 #Values for player start at 230ish
 from CYLGame import Player
-from CYLGame.Player import DefaultGridPlayer
+from CYLGame.Player import DefaultGridPlayer, Prog
 
 
 class Bike(DefaultGridPlayer):
@@ -90,7 +90,7 @@ class Bike(DefaultGridPlayer):
 
     def update_state(self, state):
         super(Bike, self).update_state(state)
-        move = chr(state["move"])
+        move = chr(state.get("move", ord("Q")))
 
         if move == "w":
             self.move("NORTH")
@@ -100,5 +100,30 @@ class Bike(DefaultGridPlayer):
             self.move("WEST")
         if move == "d":
             self.move("EAST")
-        if move == "Q":
+        if move == "Q":  # Should this be an else statement. Then any invalid input is the same as quiting.
             self.derezzed = True
+
+
+class DumbComputer(Prog):
+    def __init__(self):
+        super(DumbComputer, self).__init__()
+        self.last_move = None
+
+    def run(self, state=None, max_op_count=-1):
+        import random
+        moves = list(map(ord, ["w", "a", "s", "d"]))
+
+        if self.last_move:
+            if self.last_move == ord("w"):
+                moves.remove(ord("s"))
+            if self.last_move == ord("s"):
+                moves.remove(ord("w"))
+            if self.last_move == ord("a"):
+                moves.remove(ord("d"))
+            if self.last_move == ord("d"):
+                moves.remove(ord("a"))
+            self.last_move = random.choice(moves)
+            return {"move": self.last_move}
+        else:
+            self.last_move = random.choice(moves)
+            return {"move": self.last_move}

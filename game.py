@@ -87,11 +87,14 @@ class Tron(GridGame):
     def is_running(self):
         return self.running
 
-
     @staticmethod
     def default_prog_for_bot(language):
         if language == GameLanguage.LITTLEPY:
             return open("apple_bot.lp", "r").read()
+
+    @staticmethod
+    def default_prog_for_computer():
+        return DumbComputer
 
     @staticmethod
     def get_intro():
