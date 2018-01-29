@@ -1,14 +1,15 @@
 from __future__ import print_function
 import math
 from CYLGame import GameLanguage
-from CYLGame import Game
+from CYLGame import GridGame
 from CYLGame import MessagePanel
 from CYLGame import MapPanel
 from CYLGame import StatusPanel
 from CYLGame import PanelBorder
 from Bikes import *
 
-class Tron(Game):
+
+class Tron(GridGame):
     MAP_WIDTH = 40
     MAP_HEIGHT = 20
     SCREEN_WIDTH = 45
@@ -19,6 +20,7 @@ class Tron(Game):
     CHAR_HEIGHT = 16
     GAME_TITLE = "TRON"
     CHAR_SET = "tron16x16_gs_ro.png"
+    MULTIPLAYER = True
     
     EMPTY = ' '
 
@@ -36,17 +38,16 @@ class Tron(Game):
         self.msg_panel.add("Welcome to Game GRID!!!")
         self.msg_panel.add("Stop The Corruption")
 
-        self.__create_map()
-
-    def __create_map(self):
+    def init_board(self):
         self.map = MapPanel(0, 0, self.MAP_WIDTH, self.MAP_HEIGHT+1, self.EMPTY,
                             border=PanelBorder.create(bottom="-"))
         self.panels += [self.map]
 
-    def get_new_player(self, prog):
+    def create_new_player(self, prog):
         self.players += [self.place_bike(prog)]
         player = self.players[-1]
         self.map[player.pos()] = player.char
+        self.num_alive += 1
         return player
     
     def place_bike(self, prog):
@@ -55,15 +56,16 @@ class Tron(Game):
             y = self.random.randint(0, self.MAP_HEIGHT - 1)
 
             if self.map[(x, y)] == self.EMPTY:
-                return Bike((x, y), chr(239), prog)
+                return Bike((x, y), chr(239), prog, self.get_move_consts())
 
-    def update(self):
+    def do_turn(self):
         self.turns += 1
 
         self.num_alive = 0
         for player in self.players:
             if not player.derezzed:
-                self.map[player.old] = player.prev_char
+                if player.old is not None:
+                    self.map[player.old] = player.prev_char
                 if player.x == self.MAP_WIDTH or player.x < 0:
                     player.derezzed = True
                 elif player.y == self.MAP_HEIGHT or player.y < 0:
@@ -81,7 +83,6 @@ class Tron(Game):
         for j in bike.path:
             self.map[j] = self.EMPTY
         bike.derezzed = True
-
 
     def is_running(self):
         return self.running
@@ -109,12 +110,22 @@ class Tron(Game):
             #     self.msg_panel += ["END OF LINE"]
             # else:
             #     self.msg_panel += ["Corruption progress has stopped Exit(0)"]
+        elif self.num_alive == 0:
+            self.msg_panel.add("No Player Won.")
+            self.running = False
 
         # Update Status
         self.status_panel["Enemies"] = str(self.num_alive-1) + " left"
         self.status_panel["Turns"] = str(self.turns)
         for panel in self.panels:
             panel.redraw(frame_buffer)
+
+    def get_vars(self, player):
+        return {}
+
+    @staticmethod
+    def get_number_of_players():
+        return 4
 
 
 if __name__ == '__main__':

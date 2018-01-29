@@ -3,11 +3,12 @@ import random
 #Values for Orange PNG start at 240
 #Values for player start at 230ish
 from CYLGame import Player
+from CYLGame.Player import DefaultGridPlayer
 
 
-class Bike(Player):
-    def __init__(self, pos, char, prog):
-        super(Bike, self).__init__(prog)
+class Bike(DefaultGridPlayer):
+    def __init__(self, pos, char, prog, bot_consts):
+        super(Bike, self).__init__(prog, bot_consts)
         self.x = pos[0]
         self.y = pos[1]
         self.path = []
@@ -87,8 +88,9 @@ class Bike(Player):
             self.prev_char = chr(self.CHAR_START + index)
         self.prev_move = move
 
-    def handle_move(self, state):
-        move = state["move"]
+    def update_state(self, state):
+        super(Bike, self).update_state(state)
+        move = chr(state["move"])
 
         if move == "w":
             self.move("NORTH")
