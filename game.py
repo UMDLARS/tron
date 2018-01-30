@@ -11,8 +11,8 @@ from Bikes import *
 class Tron(Game):
     SCREEN_WIDTH = 60
     SCREEN_HEIGHT = 50
-    MAP_WIDTH = 40  #TRUE DIMENSIONS
-    MAP_HEIGHT = 30 #TRUE DIMENSIONS
+    MAP_WIDTH = 50  #TRUE DIMENSIONS
+    MAP_HEIGHT = 40 #TRUE DIMENSIONS
     MSG_START = 30
     MAX_MSG_LEN = MAP_WIDTH - MSG_START - 1
     CHAR_WIDTH = 16
@@ -46,7 +46,7 @@ class Tron(Game):
         self.__create_map()
 
     def __create_map(self):
-        self.map = MapPanel(0, 0, self.MAP_WIDTH, self.MAP_HEIGHT+1, self.EMPTY,
+        self.map = MapPanel(0, 0, self.MAP_WIDTH+2, self.MAP_HEIGHT+2, self.EMPTY,
                             border=PanelBorder.create(bottom=True, left=True, right=True, top=True))
         self.panels += [self.map]
 
@@ -58,8 +58,8 @@ class Tron(Game):
     def place_bikes(self):
         for i in range(0, self.NUM_ENEMIES+1):
             while True:
-                x = self.random.randint(self.map.x+1, self.map.w-1)
-                y = self.random.randint(self.map.y+1, self.map.h-1)
+                x = self.random.randint(self.map.x+1, self.MAP_WIDTH)
+                y = self.random.randint(self.map.y+1, self.MAP_HEIGHT)
                 
                 if self.map[(x,y)] == self.EMPTY:
                     if i == self.enemies:
@@ -109,9 +109,9 @@ class Tron(Game):
             cor.make_move(self.map, self.map.w, self.map.h)
             
             self.map[cor.old] = cor.prev_char
-            if cor.x == self.map.w or cor.x < self.map.x:
+            if cor.x >= self.MAP_WIDTH or cor.x < self.map.x:
                 self.derezz(i)
-            elif cor.y == self.map.h or cor.y < self.map.y:
+            elif cor.y >= self.MAP_HEIGHT or cor.y < self.map.y:
                 self.derezz(i)
             elif cor.pos() in self.CORRUPTION_POSITIONS:
                 self.derezz(i)
