@@ -6,6 +6,7 @@ from CYLGame import MessagePanel
 from CYLGame import MapPanel
 from CYLGame import StatusPanel
 from CYLGame import PanelBorder
+from CYLGame import Ranking
 from Bikes import *
 
 
@@ -37,14 +38,14 @@ class Tron(GridGame):
         self.standings = []
         self.turns = 0
         self.level = 1
-        self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT+1, self.SCREEN_WIDTH - self.MSG_START, 5)
+        self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT+2, self.SCREEN_WIDTH - self.MSG_START + 1, 5)
         self.status_panel = StatusPanel(0, self.MAP_HEIGHT+1, self.MSG_START, 5)
         self.panels = [self.msg_panel, self.status_panel]
         self.msg_panel.add("Welcome to Game GRID!!!")
         self.msg_panel.add("Stop The Corruption")
 
     def init_board(self):
-        self.map = MapPanel(0, 0, self.MAP_WIDTH, self.MAP_HEIGHT+1, self.EMPTY,
+        self.map = MapPanel(0, 0, self.MAP_WIDTH + 2, self.MAP_HEIGHT+2, self.EMPTY,
                             border=PanelBorder.create(bottom=True, left=True, right=True, top=True))
         self.panels += [self.map]
 
@@ -72,9 +73,9 @@ class Tron(GridGame):
             if not player.derezzed:
                 if player.old is not None:
                     self.map[player.old] = player.prev_char
-                if player.x == self.MAP_WIDTH or player.x < 0:
+                if player.x >= self.MAP_WIDTH or player.x <= 0:
                     player.derezzed = True
-                elif player.y == self.MAP_HEIGHT or player.y < 0:
+                elif player.y >= self.MAP_HEIGHT or player.y <= 0:
                     player.derezzed = True
                 elif self.map[(player.x, player.y)] != ' ':
                     player.derezzed = True
@@ -84,6 +85,21 @@ class Tron(GridGame):
                     self.derezz(player)
                 else:
                     self.num_alive += 1
+
+        if self.num_alive == 1:
+            self.msg_panel.add("Player {} Won!".format([x for x in range(len(self.players)) if not self.players[x].derezzed][0]))
+            for p in self.players:
+                if not p.derezzed:
+                    self.standings += [ ]
+            self.running = False
+            # if self.enemies > 0:
+            #     self.msg_panel += ["END OF LINE"]
+            # else:
+            #     self.msg_panel += ["Corruption progress has stopped Exit(0)"]
+        elif self.num_alive == 0:
+            self.msg_panel.add("No Player Won.")
+            self.running = False
+
 
     def derezz(self, bike):
         for j in bike.path:
@@ -108,24 +124,9 @@ class Tron(GridGame):
         return open("intro.md", "r").read()
 
     def get_score(self):
-        return self.standings
+        return Ranking(self.standings)
 
     def draw_screen(self, frame_buffer):
-        # End of the game
-
-        if self.num_alive == 1:
-            self.msg_panel.add("Player {} Won!".format([x for x in range(len(self.players)) if not self.players[x].derezzed][0]))
-            for p in self.players:
-                if not p.derezzed:
-                    self.standings += [p]
-            self.running = False
-            # if self.enemies > 0:
-            #     self.msg_panel += ["END OF LINE"]
-            # else:
-            #     self.msg_panel += ["Corruption progress has stopped Exit(0)"]
-        elif self.num_alive == 0:
-            self.msg_panel.add("No Player Won.")
-            self.running = False
 
         # Update Status
         self.status_panel["Enemies"] = str(self.num_alive-1) + " left"
