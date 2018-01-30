@@ -1,17 +1,26 @@
 #!/usr/bin/python
 import sys
-from apple_game import AppleFinder
+from game import Tron
 from littlepython import Compiler
 from CYLGame.Database import GameDB
-from CYLGame.Comp import sim_competition
+from CYLGame.Comp import MultiplayerComp
 
 
-assert len(sys.argv) >= 2
+#
+# comp_token = sys.argv[1]
+# game = AppleFinder
+# compiler = Compiler()
+# gamedb = GameDB(sys.argv[2])
+# assert gamedb.is_comp_token(comp_token)
+#
+# sim_competition(compiler=compiler, game=game, gamedb=gamedb, token=comp_token, runs=100, debug=True)
 
-comp_token = sys.argv[1]
-game = AppleFinder
+
+#def sim_multiplayer(s_token, gamedb, game, compiler, debug=False):
+
+s_token = 'S2ACBA9ED'
+game = Tron
 compiler = Compiler()
-gamedb = GameDB(sys.argv[2])
-assert gamedb.is_comp_token(comp_token)
+gamedb = GameDB("temp_game")
+MultiplayerComp.sim_multiplayer(s_token, gamedb, game, compiler)
 
-sim_competition(compiler=compiler, game=game, gamedb=gamedb, token=comp_token, runs=100, debug=True)

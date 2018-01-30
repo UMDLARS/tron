@@ -34,7 +34,7 @@ class Tron(GridGame):
         self.running = True
         self.players = []
         self.num_alive = 0
-
+        self.standings = []
         self.turns = 0
         self.level = 1
         self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT+1, self.SCREEN_WIDTH - self.MSG_START, 5)
@@ -89,6 +89,7 @@ class Tron(GridGame):
         for j in bike.path:
             self.map[j] = self.EMPTY
         bike.derezzed = True
+        self.standings += [bike]
 
     def is_running(self):
         return self.running
@@ -107,13 +108,16 @@ class Tron(GridGame):
         return open("intro.md", "r").read()
 
     def get_score(self):
-        return self.apples_eaten
+        return self.standings
 
     def draw_screen(self, frame_buffer):
         # End of the game
 
         if self.num_alive == 1:
             self.msg_panel.add("Player {} Won!".format([x for x in range(len(self.players)) if not self.players[x].derezzed][0]))
+            for p in self.players:
+                if not p.derezzed:
+                    self.standings += [p]
             self.running = False
             # if self.enemies > 0:
             #     self.msg_panel += ["END OF LINE"]
