@@ -182,9 +182,9 @@ class Tron(Game):
         for i in range(0,len(self.sensor_coords)):
             x_offset = int(self.sensor_coords[i][0])
             y_offset = int(self.sensor_coords[i][1])
-            if self.USER.x + x_offset > self.map.w or self.USER.x + x_offset < self.map.x:
+            if self.USER.x + x_offset > self.MAP_WIDTH or self.USER.x + x_offset < 0:
                 bot_vars["s"+str(i)] = self.WALL
-            elif self.USER.y + y_offset > self.map.w or self.USER.y + y_offset < self.map.x:
+            elif self.USER.y + y_offset > self.MAP_HEIGHT or self.USER.y + y_offset < 0:
                 bot_vars["s"+str(i)] = self.WALL 
             else:
                 if self.map[(self.USER.x + x_offset, self.USER.y + y_offset)] == ' ':
