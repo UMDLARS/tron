@@ -10,11 +10,11 @@ from CYLGame import PanelBorder
 from Bikes import *
 
 class Tron(Game):
-    SCREEN_WIDTH = 60
-    SCREEN_HEIGHT = 50
-    MAP_WIDTH = 50  #TRUE DIMENSIONS
-    MAP_HEIGHT = 40 #TRUE DIMENSIONS
-    MSG_START = 30
+    SCREEN_WIDTH = 45
+    SCREEN_HEIGHT = 30
+    MAP_WIDTH = 30  #TRUE DIMENSIONS
+    MAP_HEIGHT = 20 #TRUE DIMENSIONS
+    MSG_START = 15
     MAX_MSG_LEN = MAP_WIDTH - MSG_START - 1
     CHAR_WIDTH = 16
     CHAR_HEIGHT = 16
@@ -31,7 +31,7 @@ class Tron(Game):
         self.random = random
         self.running = True
         self.DEREZZED = False
-        self.NUM_ENEMIES=2
+        self.NUM_ENEMIES=4
         self.enemies = self.NUM_ENEMIES
         self.USER = None
         self.sensor_coords = []
@@ -152,7 +152,7 @@ class Tron(Game):
         return open("intro.md", "r").read()
 
     def get_score(self):
-        return self.NUM_ENEMIES - self.enemies
+        return self.turns + ((self.NUM_ENEMIES - self.enemies + 1) * 100)
 
     def draw_screen(self, frame_buffer):
         # End of the game
@@ -165,7 +165,7 @@ class Tron(Game):
             self.running = False
 
         # Update Status
-        self.status_panel["Enemies"] = str(self.enemies) + " left"
+        self.status_panel["Enemies"] = str(self.enemies)
         self.status_panel["Turns"] = str(self.turns)
         for panel in self.panels:
             panel.redraw(frame_buffer)
@@ -205,7 +205,6 @@ class Tron(Game):
         bot_vars["width"] = self.MAP_WIDTH
 
         bot_vars["map_array"] = tuple(map_array)
-        print(bot_vars)
         return bot_vars
 
 
