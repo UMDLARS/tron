@@ -6,15 +6,15 @@
 # s0-s8
 # You will also be given a map object in the form of a 2D array:
 # You can use the width and height to iterate through the map array as well
-# directly in front of robot
+# directly above the robot
 #s1x = 0
 #s1y = -1
 
-# ahead and to left
+# above and to left
 #s2x = -1
 #s2y = -1
 
-# ahead and to right
+# above and to right
 #s3x = 1
 #s3y = -1
 
@@ -25,6 +25,13 @@
 #    OPEN = 12312
 #    WALL = 323423
 
+# use the sensors s1-s8 to make decisions. For example, to move up if the area
+# directly above you is open, do something like:
+# if s1x is OPEN {
+#     move = north
+# }
+
+# random bot
 a = rand % 4
 
 if a is 0 {
