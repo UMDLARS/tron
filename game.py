@@ -1,5 +1,6 @@
 from __future__ import print_function
 import math
+from CYLGame import GridFrameBuffer
 from CYLGame import GameLanguage
 from CYLGame import Game
 from CYLGame import MessagePanel
@@ -33,6 +34,7 @@ class Tron(Game):
         self.NUM_ENEMIES=2
         self.enemies = self.NUM_ENEMIES
         self.USER = None
+        self.sensor_coords = []
         self.CORRUPTION = []
         self.CORRUPTION_POSITIONS = [] 
         self.turns = 0
@@ -143,14 +145,14 @@ class Tron(Game):
     @staticmethod
     def default_prog_for_bot(language):
         if language == GameLanguage.LITTLEPY:
-            return open("apple_bot.lp", "r").read()
+            return open("tron.lp", "r").read()
 
     @staticmethod
     def get_intro():
         return open("intro.md", "r").read()
 
     def get_score(self):
-        return self.apples_eaten
+        return self.NUM_ENEMIES - self.enemies
 
     def draw_screen(self, frame_buffer):
         # End of the game
@@ -170,24 +172,27 @@ class Tron(Game):
     
     def read_bot_state(self, state):
         self.sensor_coords = []
-        for i in range(7):
+        for i in range(8):
             x_name = "s" + str(i + 1) + "x"
             y_name = "s" + str(i + 1) + "y"
             self.sensor_coords.append((state.get(x_name, "0"), state.get(y_name, "0")))
 
     def get_vars_for_bot(self):
-        bot_vars = {}
+        bot_vars = {"s1": 0, "s2": 0, "s3": 0, "s4": 0, "s5": 0, "s6": 0, "s7": 0, "s8": 0}
         for i in range(0,len(self.sensor_coords)):
-            if self.USER.x + ord(self.sensor_coords[i][0]) > self.map.w or self.USER.x + ord(self.sensor_coords[i][0]) < self.map.x:
+            x_offset = int(self.sensor_coords[i][0])
+            y_offset = int(self.sensor_coords[i][1])
+            if self.USER.x + x_offset > self.map.w or self.USER.x + x_offset < self.map.x:
                 bot_vars["s"+str(i)] = self.WALL
-            elif self.USER.y + ord(self.sensor_coords[i][1]) > self.map.w or self.USER.y + ord(self.sensor_coords[i][1]) < self.map.x:
+            elif self.USER.y + y_offset > self.map.w or self.USER.y + y_offset < self.map.x:
                 bot_vars["s"+str(i)] = self.WALL 
             else:
-                if self.map[(self.USER.x + ord(self.sensor_coords[i][0]), self.USER.x + ord(self.sensor_coords[i][1]))] == ' ':
+                if self.map[(self.USER.x + x_offset, self.USER.y + y_offset)] == ' ':
                     bot_vars["s"+str(i)] = self.OPEN
                 else:
                     bot_vars["s"+str(i)] = self.TAKEN
-        return {}
+        print(bot_vars)
+        return bot_vars
 
 
 if __name__ == '__main__':

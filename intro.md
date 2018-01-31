@@ -1,16 +1,18 @@
-# LARS' Apple Hunt
+# LARS' TRON
 
 ## Introduction
 
-Your brand new robot, a LARS (Laboratory for Advanced Systems Research) model JB334, (displayed with a `@`) is on the ground in an field full of apples (displayed with a `O`). The only problem is, your robot doesn't know where to go! Robot's current program drives around randomly, which isn't very good for finding apples, especially since your robot can only take **300** steps before its batteries go dead. 
+After a long night of working on the new  LARS AI, aptly named the LARS TIRED (Totally Into Retro Entertainment Daemon) AI, Professor Peterson notices something strange happening to the internal system.
 
-**You are a programmer for LARS! Your job: write a program to help your robot finds the apples!**
+Digging Peter realizes that there has been an error with the TIRED AI and it has gone rogue! TIRED digitizes the intrusive Professor and brings him to where all bad programs go: THE GAME GRID.
+
+**Your job is to write a program to help the professor destroy the malicious programs on the GAME GRID and survive!**
 
 ## The Default Program
 
 ### Random and the Modulo (Remainder) Operator
 
-Your robot is programmed in Little Python (LP), a variant of the Python programming language. 
+Your initial program is programmed in Little Python (LP), a variant of the Python programming language.
 
 The first thing your robot does is generates a random number between 0 and 3 (0, 1, 2 or 3). 
 
@@ -67,26 +69,6 @@ As you may have already guessed, your robot will move in whatever direction the 
 Of course, your current program just walks around randomly. So it's not very good.
 
 
-## Level 1: Helping Your Robot Find Apples
+## Level 1: Helping Peter Navigate the Grid
 
-Your LARS-JB334 robot comes with two apple-detecting sensors. One sensor, `x_dir` tells you whether the closest apple is to the west (left) or the east (right). The other sensor, `y_dir` tells you if the closest apple is to the north (up) or south (down). `x_dir` and `y_dir` equal 0 if you are directly in line with an apple in the given direction.
-
-You can test `x_dir` and `y_dir` using a conditional `if` statement! 
-
-For example:
-
-    if x_dir is east {
-         move = east
-    }
-
-... checks to see if `x_dir` says that the closest apple is to the east, and if it it is, sets the move to be east.
-
-By creating conditionals that test `x_dir` and `y_dir` for `west`, `north` and `south` (and set `move` accordingly) your robot will walk **directly** towards the closest apple! Try it out for yourself!
-
-**NOTE:** After you change your program, press the `Submit` button.
-
-## Level 2: Avoiding Pits!
-
-Once you clear the first level of apples, things get a little more complicated: Level 2 and above have apples, but they also have **pit traps!** If your LARS-JB334 robot falls into a pit, it breaks and the game ends.
-
-Fortunately, your robot also comes equipped with four pit detectors: `pit_to_north`, `pit_to_south`, `pit_to_east`, and `pit_to_west`. By adding some additional conditional `if` statements (and setting `move` to avoid them), you can make sure that your robot won't step into a pit!
+Use your l337 skills to help Peter navigate the GRID!
