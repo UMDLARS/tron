@@ -205,7 +205,6 @@ class Tron(Game):
         bot_vars["width"] = self.MAP_WIDTH
 
         bot_vars["map_array"] = tuple(map_array)
-        print(bot_vars)
         return bot_vars
 
 
