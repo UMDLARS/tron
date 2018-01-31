@@ -178,19 +178,19 @@ class Tron(Game):
             self.sensor_coords.append((state.get(x_name, "0"), state.get(y_name, "0")))
 
     def get_vars_for_bot(self):
-        bot_vars = {"s1": 0, "s2": 0, "s3": 0, "s4": 0, "s5": 0, "s6": 0, "s7": 0, "s8": 0}
+        bot_vars = {"s0":0, "s1": 0, "s2": 0, "s3": 0, "s4": 0, "s5": 0, "s6": 0, "s7": 0, "s8": 0}
         for i in range(0,len(self.sensor_coords)):
             x_offset = int(self.sensor_coords[i][0])
             y_offset = int(self.sensor_coords[i][1])
-            if self.USER.x + x_offset > self.MAP_WIDTH or self.USER.x + x_offset < 0:
+            if self.USER.x + x_offset >= self.MAP_WIDTH or self.USER.x + x_offset <= 0:
                 bot_vars["s"+str(i)] = self.WALL
-            elif self.USER.y + y_offset > self.MAP_HEIGHT or self.USER.y + y_offset < 0:
+            elif self.USER.y + y_offset >= self.MAP_HEIGHT or self.USER.y + y_offset <= 0:
                 bot_vars["s"+str(i)] = self.WALL 
             else:
                 if self.map[(self.USER.x + x_offset, self.USER.y + y_offset)] == ' ':
-                    bot_vars["s"+str(i)] = self.OPEN
+                    bot_vars["s"+str(i+1)] = self.OPEN
                 else:
-                    bot_vars["s"+str(i)] = self.TAKEN
+                    bot_vars["s"+str(i+1)] = self.TAKEN
         map_array = []
         for w in range(self.map.x, self.MAP_WIDTH):
             width_arr = []
@@ -205,6 +205,7 @@ class Tron(Game):
         bot_vars["width"] = self.MAP_WIDTH
 
         bot_vars["map_array"] = tuple(map_array)
+        print(bot_vars)
         return bot_vars
 
 
