@@ -27,7 +27,7 @@
 
 # use the sensors s1-s8 to make decisions. For example, to move up if the area
 # directly above you is open, do something like the following (in your program,
-not as a comment):
+# not as a comment):
 # s1x = 0
 # s1y = -1
 # if s1 is OPEN {

@@ -39,7 +39,7 @@ class Tron(Game):
         self.CORRUPTION_POSITIONS = [] 
         self.turns = 0
         self.level = 1
-        self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT, self.SCREEN_WIDTH - self.MSG_START, 5)
+        self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT + 1, self.SCREEN_WIDTH - self.MSG_START, 5)
         self.status_panel = StatusPanel(0, self.MAP_HEIGHT+1, self.MSG_START, 5)
         self.panels = [self.msg_panel, self.status_panel]
         self.msg_panel.add("Welcome to Game GRID!!!")

@@ -8,6 +8,9 @@ Digging Peter realizes that there has been an error with the TIRED AI and it has
 
 **Your job is to write a program to help the professor destroy the malicious programs on the GAME GRID and survive!**
 
+#Sensors
+`map_array`, `height`, `width`, `s0`, `s1`, `s2`, `s3`, `s4`, `s5`, `s6`, `s7`, `s8`
+
 ## The Default Program
 
 ### Random and the Modulo (Remainder) Operator
