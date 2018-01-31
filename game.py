@@ -39,7 +39,7 @@ class Tron(Game):
         self.CORRUPTION_POSITIONS = [] 
         self.turns = 0
         self.level = 1
-        self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT+1, self.SCREEN_WIDTH - self.MSG_START, 5)
+        self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT, self.SCREEN_WIDTH - self.MSG_START, 5)
         self.status_panel = StatusPanel(0, self.MAP_HEIGHT+1, self.MSG_START, 5)
         self.panels = [self.msg_panel, self.status_panel]
         self.msg_panel.add("Welcome to Game GRID!!!")
@@ -60,8 +60,8 @@ class Tron(Game):
     def place_bikes(self):
         for i in range(0, self.NUM_ENEMIES+1):
             while True:
-                x = self.random.randint(self.map.x+1, self.MAP_WIDTH)
-                y = self.random.randint(self.map.y+1, self.MAP_HEIGHT)
+                x = self.random.randint(0, self.MAP_WIDTH-1)
+                y = self.random.randint(0, self.MAP_HEIGHT-1)
                 
                 if self.map[(x,y)] == self.EMPTY:
                     if i == self.enemies:
@@ -89,10 +89,10 @@ class Tron(Game):
             self.DEREZZED = True
             return
         self.map[self.USER.old] = self.USER.prev_char
-        if self.USER.x >= self.map.w or self.USER.x < self.map.x:
+        if 0 >= self.USER.x or self.USER.x >= self.MAP_WIDTH:
             self.DEREZZED = True
             return
-        elif self.USER.y >= self.map.h or self.USER.y < self.map.y:
+        elif 0 >=  self.USER.y or self.USER.y >= self.MAP_HEIGHT:
             self.DEREZZED = True
             return
         elif self.map[(self.USER.x, self.USER.y)] != ' ':
@@ -111,9 +111,9 @@ class Tron(Game):
             cor.make_move(self.map, self.map.w, self.map.h)
             
             self.map[cor.old] = cor.prev_char
-            if cor.x >= self.MAP_WIDTH or cor.x < self.map.x:
+            if 0 >= cor.x or cor.x >= self.MAP_WIDTH:
                 self.derezz(i)
-            elif cor.y >= self.MAP_HEIGHT or cor.y < self.map.y:
+            elif 0 >= cor.y or cor.y >= self.MAP_HEIGHT:
                 self.derezz(i)
             elif cor.pos() in self.CORRUPTION_POSITIONS:
                 self.derezz(i)
