@@ -4,6 +4,8 @@
 # Any invalid move will be taken as no move.
 # You will be given 8 sensors that you can move around the grid:
 # s0-s8
+# You will also be given a map object in the form of a 2D array:
+# You can use the width and height to iterate through the map array as well
 # directly in front of robot
 #s1x = 0
 #s1y = -1

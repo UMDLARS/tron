@@ -191,6 +191,20 @@ class Tron(Game):
                     bot_vars["s"+str(i)] = self.OPEN
                 else:
                     bot_vars["s"+str(i)] = self.TAKEN
+        map_array = []
+        for w in range(self.map.x, self.MAP_WIDTH):
+            width_arr = []
+            for h in range(self.map.y, self.MAP_HEIGHT):
+                if self.map[(w, h)] == ' ':
+                    width_arr.append(self.OPEN)
+                else:
+                    width_arr.append(self.TAKEN)
+            map_array.append(tuple(width_arr))
+
+        bot_vars["height"] = self.MAP_HEIGHT
+        bot_vars["width"] = self.MAP_WIDTH
+
+        bot_vars["map_array"] = tuple(map_array)
         print(bot_vars)
         return bot_vars
 
