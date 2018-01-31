@@ -31,7 +31,7 @@ class Tron(Game):
         self.random = random
         self.running = True
         self.DEREZZED = False
-        self.NUM_ENEMIES=4
+        self.NUM_ENEMIES=1
         self.enemies = self.NUM_ENEMIES
         self.USER = None
         self.sensor_coords = []
