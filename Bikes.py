@@ -7,6 +7,8 @@ from CYLGame.Player import DefaultGridPlayer, Prog
 
 
 class Bike(DefaultGridPlayer):
+    ILLEGAL_CHARS = ["|", "=", "-"]
+
     def __init__(self, pos, char, prog, bot_consts):
         super(Bike, self).__init__(prog, bot_consts)
         self.x = pos[0]
@@ -17,6 +19,7 @@ class Bike(DefaultGridPlayer):
         self.prev_move = None
         self.old = None
         self.derezzed = False
+        self.sensor_coords = []
 
         self.CHAR_START = 228
 
@@ -38,7 +41,6 @@ class Bike(DefaultGridPlayer):
         elif direct == "EAST":
             self.x += 1
         self.det_prev_char(direct)
-
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -102,6 +104,15 @@ class Bike(DefaultGridPlayer):
             self.do_move("EAST")
         if self.move == "Q":  # Should this be an else statement. Then any invalid input is the same as quiting.
             self.derezzed = True
+
+        self.update_sensors(state)
+
+    def update_sensors(self, state):
+        self.sensor_coords = []
+        for i in range(7):
+            x_name = "s" + str(i + 1) + "x"
+            y_name = "s" + str(i + 1) + "y"
+            self.sensor_coords.append((state.get(x_name, "0"), state.get(y_name, "0")))
 
 
 class DumbComputer(Prog):
