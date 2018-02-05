@@ -1,5 +1,4 @@
-from __future__ import print_function
-import math
+from __future__ import print_function, division
 from CYLGame import GameLanguage
 from CYLGame import GridGame
 from CYLGame import MessagePanel
@@ -29,7 +28,6 @@ class Tron(GridGame):
     
     EMPTY = ' '
 
-
     def __init__(self, random):
         self.random = random
         self.running = True
@@ -38,14 +36,14 @@ class Tron(GridGame):
         self.standings = []
         self.turns = 0
         self.level = 1
-        self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT+2, self.SCREEN_WIDTH - self.MSG_START + 1, 5)
-        self.status_panel = StatusPanel(0, self.MAP_HEIGHT+1, self.MSG_START, 5)
+        self.msg_panel = MessagePanel(self.MSG_START, self.MAP_HEIGHT + 2, self.SCREEN_WIDTH - self.MSG_START + 1, 5)
+        self.status_panel = StatusPanel(0, self.MAP_HEIGHT + 2, self.MSG_START, 5)
         self.panels = [self.msg_panel, self.status_panel]
         self.msg_panel.add("Welcome to Game GRID!!!")
         self.msg_panel.add("Stop The Corruption")
 
     def init_board(self):
-        self.map = MapPanel(0, 0, self.MAP_WIDTH + 2, self.MAP_HEIGHT+2, self.EMPTY,
+        self.map = MapPanel(1, 1, self.MAP_WIDTH, self.MAP_HEIGHT, self.EMPTY,
                             border=PanelBorder.create(bottom=True, left=True, right=True, top=True))
         self.panels += [self.map]
 
