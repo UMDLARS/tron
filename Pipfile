@@ -10,6 +10,8 @@ name = "pypi"
 pygame = "*"
 pytest-flask = "*"
 "e1839a8" = {path = ".", editable = true}
+pytest-cov = "*"
+codecov = "*"
 
 
 [packages]
