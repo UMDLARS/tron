@@ -1,4 +1,5 @@
 from __future__ import print_function, division
+import os
 from CYLGame import GameLanguage
 from CYLGame import GridGame
 from CYLGame import MessagePanel
@@ -112,7 +113,7 @@ class Tron(GridGame):
     @staticmethod
     def default_prog_for_bot(language):
         if language == GameLanguage.LITTLEPY:
-            return open("tron.lp", "r").read()
+            return open(os.path.join(os.path.dirname(__file__), "tron.lp"), "r").read()
 
     @staticmethod
     def default_prog_for_computer():
@@ -120,7 +121,7 @@ class Tron(GridGame):
 
     @staticmethod
     def get_intro():
-        return open("intro.md", "r").read()
+        return open(os.path.join(os.path.dirname(__file__), "intro.md"), "r").read()
 
     def get_score(self):
         return Ranking(self.standings)

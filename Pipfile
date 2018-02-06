@@ -8,11 +8,13 @@ name = "pypi"
 [dev-packages]
 
 pygame = "*"
+pytest-flask = "*"
+"e1839a8" = {path = ".", editable = true}
 
 
 [packages]
 
-cylgame = "==1.5.0"
+cylgame = "==1.5.1"
 
 
 [requires]
