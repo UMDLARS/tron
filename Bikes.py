@@ -42,11 +42,6 @@ class Bike(DefaultGridPlayer):
             self.x += 1
         self.det_prev_char(direct)
 
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.x == other.x and self.y == other.y
-        return False
-
     def derezz(self):
         return self.path
 #I will need to implement an algorithm for the corruption to utilize when making their decisions.
