@@ -48,7 +48,7 @@ class Tron(GridGame):
                             border=PanelBorder.create(bottom=True, left=True, right=True, top=True))
         self.panels += [self.map]
 
-    def create_new_player(self, prog):
+    def create_new_player(self, prog) -> Bike:
         self.players += [self.place_bike(prog)]
         player = self.players[-1]
         self.map[player.pos()] = player.char
@@ -156,6 +156,14 @@ class Tron(GridGame):
                     bot_vars["s" + str(i + 1)] = self.OPEN
                 else:
                     bot_vars["s" + str(i + 1)] = self.TAKEN
+
+        bot_vars["height"] = self.MAP_HEIGHT
+        bot_vars["width"] = self.MAP_WIDTH
+
+        bot_vars["map"] = self.get_map_array()
+        return bot_vars
+
+    def get_map_array(self):
         map_array = []
         for w in range(0, self.MAP_WIDTH):
             width_arr = []
@@ -165,12 +173,7 @@ class Tron(GridGame):
                 else:
                     width_arr.append(self.TAKEN)
             map_array.append(list(width_arr))
-
-        bot_vars["height"] = self.MAP_HEIGHT
-        bot_vars["width"] = self.MAP_WIDTH
-
-        bot_vars["map"] = map_array
-        return bot_vars
+        return map_array
 
     @staticmethod
     def get_move_consts():
