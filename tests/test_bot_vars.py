@@ -54,13 +54,11 @@ def test_start_vars(mocker):
     prog.key = "d"
     vars = game.get_vars(player)
     correct_vars = {**make_tron_sensors(game, player, default=0),
-                    "height": game.MAP_HEIGHT, "width": game.MAP_WIDTH}
-    correct_vars["map"] = make_tron_map(game, (x, y))
+                    "height": game.MAP_HEIGHT,
+                    "width": game.MAP_WIDTH,
+                    "map": make_tron_map(game, (x, y))}
 
     assert vars == correct_vars
-    # player.run_turn(None)
-    # prog.last_state == {}
-    # game.do_turn()
 
 
 def test_start_vars_2(mocker):
@@ -76,8 +74,9 @@ def test_start_vars_2(mocker):
     prog.key = "d"
     vars = game.get_vars(player)
     correct_vars = {**make_tron_sensors(game, player, default=0),
-                    "height": game.MAP_HEIGHT, "width": game.MAP_WIDTH}
-    correct_vars["map"] = make_tron_map(game, (x, y))
+                    "height": game.MAP_HEIGHT,
+                    "width": game.MAP_WIDTH,
+                    "map": make_tron_map(game, (x, y))}
 
     assert vars == correct_vars
 
@@ -99,8 +98,9 @@ def test_move_vars(mocker):
     vars = game.get_vars(player)
 
     correct_vars = {**make_tron_sensors(game, player, default=game.TAKEN),
-                    "height": game.MAP_HEIGHT, "width": game.MAP_WIDTH}
-    correct_vars["map"] = make_tron_map(game, (x+1, y), (x, y))
+                    "height": game.MAP_HEIGHT,
+                    "width": game.MAP_WIDTH,
+                    "map": make_tron_map(game, (x+1, y), (x, y))}
 
     assert vars == correct_vars
 
@@ -108,7 +108,7 @@ def test_move_vars(mocker):
 def test_wall_vars(mocker):
     game = Tron(None)
     mocker.patch.object(game, 'place_bike')
-    x, y = 1, 1
+    x, y = 0, 0
     prog = MockProg()
 
     game.init_board()
@@ -123,7 +123,59 @@ def test_wall_vars(mocker):
     vars = game.get_vars(player)
 
     correct_vars = {**make_tron_sensors(game, player, default=game.TAKEN, s1=game.WALL),
-                    "height": game.MAP_HEIGHT, "width": game.MAP_WIDTH}
-    correct_vars["map"] = make_tron_map(game, (x+1, y), (x, y))
+                    "height": game.MAP_HEIGHT,
+                    "width": game.MAP_WIDTH,
+                    "map": make_tron_map(game, (x+1, y), (x, y))}
+
+    assert vars == correct_vars
+
+
+def test_wall2_vars(mocker):
+    game = Tron(None)
+    mocker.patch.object(game, 'place_bike')
+    x, y = 0, 0
+    prog = MockProg()
+
+    game.init_board()
+    game.place_bike.return_value = Bike((x, y), chr(239), prog, game.get_move_consts())
+    player = game.create_new_player(prog)
+    game.start_game()
+    prog.key = "d"  # move right
+    prog.state = {"s1x": 0, "s1y": -1}
+
+    player.run_turn(None)
+    game.do_turn()
+    vars = game.get_vars(player)
+
+    correct_vars = {**make_tron_sensors(game, player, default=game.TAKEN, s1=game.WALL),
+                    "height": game.MAP_HEIGHT,
+                    "width": game.MAP_WIDTH,
+                    "map": make_tron_map(game, (x+1, y), (x, y))}
+
+    assert vars == correct_vars
+
+
+def test_wall3_vars(mocker):
+    game = Tron(None)
+    mocker.patch.object(game, 'place_bike')
+    x, y = 1, 1
+    prog = MockProg()
+
+    game.init_board()
+    game.place_bike.return_value = Bike((x, y), chr(239), prog, game.get_move_consts())
+    player = game.create_new_player(prog)
+    game.start_game()
+    prog.key = "d"  # move right
+    prog.state = {"s1x": 0, "s1y": -1,
+                  "s2x": -1, "s2y": 0}
+
+    player.run_turn(None)
+    game.do_turn()
+    vars = game.get_vars(player)
+
+    correct_vars = {**make_tron_sensors(game, player, default=game.TAKEN, s1=game.OPEN, s2=game.TAKEN),
+                    "height": game.MAP_HEIGHT,
+                    "width": game.MAP_WIDTH,
+                    "map": make_tron_map(game, (x+1, y), (x, y))}
 
     assert vars == correct_vars

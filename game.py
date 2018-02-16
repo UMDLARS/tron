@@ -147,9 +147,9 @@ class Tron(GridGame):
         for i in range(len(player.sensor_coords)):
             x_offset = int(player.sensor_coords[i][0])
             y_offset = int(player.sensor_coords[i][1])
-            if player.x + x_offset >= self.MAP_WIDTH or player.x + x_offset <= 0:
+            if player.x + x_offset >= self.MAP_WIDTH or player.x + x_offset < 0:
                 bot_vars["s" + str(i+1)] = self.WALL
-            elif player.y + y_offset >= self.MAP_HEIGHT or player.y + y_offset <= 0:
+            elif player.y + y_offset >= self.MAP_HEIGHT or player.y + y_offset < 0:
                 bot_vars["s" + str(i+1)] = self.WALL
             else:
                 if self.map[(player.x + x_offset, player.y + y_offset)] == ' ':
