@@ -14,11 +14,12 @@ pytest-cov = "*"
 codecov = "*"
 pytest-mock = "*"
 pytest-runner = "*"
+ipython = "*"
 
 
 [packages]
 
-cylgame = "==1.6.0"
+cylgame = "==1.6.1"
 
 
 [requires]
