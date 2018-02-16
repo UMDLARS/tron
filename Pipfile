@@ -18,7 +18,7 @@ pytest-runner = "*"
 
 [packages]
 
-cylgame = "==1.5.1"
+cylgame = "==1.6.0"
 
 
 [requires]
