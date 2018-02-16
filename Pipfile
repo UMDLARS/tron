@@ -23,4 +23,4 @@ cylgame = "==1.6.0"
 
 [requires]
 
-python = ">=3.5"
+python = ">=3.6"
