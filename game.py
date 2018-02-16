@@ -54,6 +54,9 @@ class Tron(GridGame):
         self.map[player.pos()] = player.char
         self.num_alive += 1
         return player
+
+    def start_game(self):
+        self.update_player_states()
     
     def place_bike(self, prog):
         while True:
@@ -101,6 +104,8 @@ class Tron(GridGame):
             self.msg_panel.add("No Player Won.")
             self.is_stopping = True
 
+        self.update_player_states()
+
     def derezz(self, bike):
         for j in bike.path:
             self.map[j] = self.EMPTY
@@ -133,15 +138,19 @@ class Tron(GridGame):
         for panel in self.panels:
             panel.redraw(frame_buffer)
 
+    def update_player_states(self):
+        for player in self.players:
+            player.bot_vars = self.get_vars(player)
+
     def get_vars(self, player):
-        bot_vars = {"s0": 0, "s1": 0, "s2": 0, "s3": 0, "s4": 0, "s5": 0, "s6": 0, "s7": 0, "s8": 0}
-        for i in range(0,len(player.sensor_coords)):
+        bot_vars = {"s{}".format(i+1): 0 for i in range(player.NUM_OF_SENSORS)}
+        for i in range(len(player.sensor_coords)):
             x_offset = int(player.sensor_coords[i][0])
             y_offset = int(player.sensor_coords[i][1])
             if player.x + x_offset >= self.MAP_WIDTH or player.x + x_offset <= 0:
-                bot_vars["s" + str(i)] = self.WALL
+                bot_vars["s" + str(i+1)] = self.WALL
             elif player.y + y_offset >= self.MAP_HEIGHT or player.y + y_offset <= 0:
-                bot_vars["s" + str(i)] = self.WALL
+                bot_vars["s" + str(i+1)] = self.WALL
             else:
                 if self.map[(player.x + x_offset, player.y + y_offset)] == ' ':
                     bot_vars["s" + str(i + 1)] = self.OPEN
@@ -160,7 +169,7 @@ class Tron(GridGame):
         bot_vars["height"] = self.MAP_HEIGHT
         bot_vars["width"] = self.MAP_WIDTH
 
-        bot_vars["map_array"] = map_array
+        bot_vars["map"] = map_array
         return bot_vars
 
     @staticmethod

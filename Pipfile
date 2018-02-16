@@ -12,6 +12,8 @@ pytest-flask = "*"
 "e1839a8" = {path = ".", editable = true}
 pytest-cov = "*"
 codecov = "*"
+pytest-mock = "*"
+pytest-runner = "*"
 
 
 [packages]

@@ -8,6 +8,7 @@ from CYLGame.Player import DefaultGridPlayer, Prog
 
 class Bike(DefaultGridPlayer):
     ILLEGAL_CHARS = ["|", "=", "-"]
+    NUM_OF_SENSORS = 8
 
     def __init__(self, pos, char, prog, bot_consts):
         super(Bike, self).__init__(prog, bot_consts)
@@ -104,7 +105,7 @@ class Bike(DefaultGridPlayer):
 
     def update_sensors(self, state):
         self.sensor_coords = []
-        for i in range(7):
+        for i in range(self.NUM_OF_SENSORS):
             x_name = "s" + str(i + 1) + "x"
             y_name = "s" + str(i + 1) + "y"
             self.sensor_coords.append((state.get(x_name, "0"), state.get(y_name, "0")))
@@ -115,8 +116,9 @@ class DumbComputer(Prog):
         super(DumbComputer, self).__init__()
         self.last_move = None
 
-    def run(self, state=None, max_op_count=-1):
-        import random
+    def run(self, state=None, max_op_count=-1, random=None):
+        if random is None:
+            import random
         moves = list(map(ord, ["w", "a", "s", "d"]))
 
         if self.last_move:
