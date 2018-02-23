@@ -2,6 +2,7 @@ init:
 	pip install pipenv
 	pipenv install
 	pipenv install --dev
+	pipenv graph
 
 test:
 	$(shell export PYTHONPATH=$PYTHONPATH:$(pwd))
