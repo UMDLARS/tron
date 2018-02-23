@@ -19,7 +19,7 @@ ipython = "*"
 
 [packages]
 
-cylgame = "==1.6.1"
+cylgame = "==1.6.4"
 
 
 [requires]

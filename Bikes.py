@@ -115,6 +115,7 @@ class DumbComputer(Prog):
     def __init__(self):
         super(DumbComputer, self).__init__()
         self.last_move = None
+        self.name = "Computer"
 
     def run(self, state=None, max_op_count=-1, random=None):
         if random is None:
