@@ -22,7 +22,7 @@ class Bike(DefaultGridPlayer):
         self.derezzed = False
         self.sensor_coords = []
 
-        self.CHAR_START = 228
+        self.CHAR_START = ord(self.char) + 1
 
     def __str__(self):
         return self.char
@@ -45,8 +45,11 @@ class Bike(DefaultGridPlayer):
 
     def derezz(self):
         return self.path
-#I will need to implement an algorithm for the corruption to utilize when making their decisions.
-#A suggested implementation is to use a minimax algorithm. https://www.sifflez.org/misc/tronbot/
+
+# I will need to implement an algorithm for the corruption to utilize
+# when making their decisions.  A suggested implementation is to use a
+# minimax algorithm. https://www.sifflez.org/misc/tronbot/
+
     def det_prev_char(self, move):
         if self.prev_move == None:
             if move == "NORTH" or move == "SOUTH":

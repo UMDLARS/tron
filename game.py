@@ -21,6 +21,12 @@ class Tron(GridGame):
     CHAR_HEIGHT = 16
     GAME_TITLE = "TRON"
     CHAR_SET = "tron16x16_gs_ro.png"
+    GOLD_BOT = chr(240)
+    SLATE_BOT = chr(144)
+    RED_BOT = chr(153)
+    PURPLE_BOT = chr(160)
+    CYAN_BOT = chr(227)
+    BOT_SPRITES = [GOLD_BOT, SLATE_BOT, RED_BOT, PURPLE_BOT, CYAN_BOT]
 
     TAKEN = 8912
     OPEN = 12312
@@ -49,7 +55,7 @@ class Tron(GridGame):
         self.panels += [self.map]
 
     def create_new_player(self, prog) -> Bike:
-        self.players += [self.place_bike(prog)]
+        self.players += [self.place_bike(prog, len(self.players))]
         player = self.players[-1]
         self.map[player.pos()] = player.char
         self.num_alive += 1
@@ -58,13 +64,13 @@ class Tron(GridGame):
     def start_game(self):
         self.update_player_states()
     
-    def place_bike(self, prog):
+    def place_bike(self, prog, bot_id):
         while True:
             x = self.random.randint(0, self.MAP_WIDTH - 1)
             y = self.random.randint(0, self.MAP_HEIGHT - 1)
 
             if self.map[(x, y)] == self.EMPTY:
-                return Bike((x, y), chr(239), prog, self.get_move_consts())
+                return Bike((x, y), self.BOT_SPRITES[bot_id % len(self.BOT_SPRITES)], prog, self.get_move_consts())
 
     def do_turn(self):
         if self.is_stopping:
