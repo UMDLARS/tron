@@ -21,6 +21,7 @@ def test_run_for_playback(seed):
     compiler = Compiler()
     bot = Game.default_prog_for_bot(GameLanguage.LITTLEPY)
     prog = compiler.compile(bot)
+    prog.name = "Mock"
 
     # get computer players
     players = []
@@ -38,6 +39,7 @@ def test_run_for_score(seed):
     compiler = Compiler()
     bot = Game.default_prog_for_bot(GameLanguage.LITTLEPY)
     prog = compiler.compile(bot)
+    prog.name = "Mock"
 
     # get computer players
     players = []
