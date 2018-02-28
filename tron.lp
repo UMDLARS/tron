@@ -1,24 +1,34 @@
-# Apple Example Bot
 # Name: Example Bot
-# You must set move to east, west, south, or north to move in the respective directions.
-# Any invalid move will be taken as no move.
-# You will be given 8 sensors that you can move around the grid:
-# s1-s8
-# You will also be given a map object in the form of a 2D array:
-# You can use the width and height to iterate through the map array as well
-# directly above the robot
-#s1x = 0
-#s1y = -1
+#       ^^^^^^^^^^^--- change the name of your bot!
+#
+# You must set move to east, west, south, or north to move in the
+# respective directions.  Any invalid move will be taken as no move.
+#
+# SENSORS
+#
+# You have 8 sensors (s1 through s8) that you can use to query the map
+# state at a given point. To tell them "where to look" you must set
+# their X and Y value relative to your own position.
+#
+# The space (0,0) is the upper left corner of the map, so "up" is
+# negative and "down" is positive. Right is positive and left is
+# negative. The following instructions set s1 to north, s2 to east, s3 to
+# south and s4 to west:
 
-# above and to left
-#s2x = -1
-#s2y = -1
+# to the north
+s1x = 0 
+s1y = -1
+# to the east
+s2x = 1
+s2y = 0
+# to the south
+s3x = 0
+s3y = 1
+# to the west
+s4x = -1
+s4y = 0
 
-# above and to right
-#s3x = 1
-#s3y = -1
-
-# remember sensors s4-s8!
+# remember you can change these and you also have sensors s5-s8!
 
 #The return values of these sensors correspond with the values shown below:
 #   TAKEN = 8912
@@ -33,8 +43,15 @@
 # if s1 is OPEN {
 #     move = north
 # }
+#
+# ADVANCED: MAP ARRAY
+#
+# You can use the variable `map` as a 2D array (using the variables
+# `height` and `width`) to access the entire map state. For example, you
+# can use loops to search regions of the map. Access the 2D map array
+# which is between map[0][0] and map[width][height].
 
-# random bot
+# random bot that does not use sensors
 a = rand % 4
 
 if a is 0 {
@@ -49,3 +66,4 @@ if a is 2 {
 if a is 3 {
   move = south
 }
+
