@@ -97,7 +97,8 @@ class Tron(GridGame):
                     self.num_alive += 1
 
         if self.num_alive == 1:
-            self.msg_panel.add("Player {} Won!".format([x for x in range(len(self.players)) if not self.players[x].derezzed][0]))
+            winning_player = [p for p in self.players if not p.derezzed][0]
+            self.msg_panel.add("{} Won!".format(winning_player.name))
             for p in self.players:
                 if not p.derezzed:
                     self.standings += [p]
