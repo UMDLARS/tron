@@ -12,6 +12,7 @@ class Bike(DefaultGridPlayer):
 
     def __init__(self, pos, char, prog, bot_consts):
         super(Bike, self).__init__(prog, bot_consts)
+        self.name = prog.name
         self.x = pos[0]
         self.y = pos[1]
         self.path = []
