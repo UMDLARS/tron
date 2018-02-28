@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "35c491522786ffb8fc48081d70ed9a5d256457379ba3e8e6cb175a265129c3e5"
+            "sha256": "0d342c9182296add3cff5bebd50298c2232bf9eb9a606c5ec81fa6538f2e4574"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -38,9 +38,9 @@
         },
         "cylgame": {
             "hashes": [
-                "sha256:71084a20111f0d3a75d80aaada1d6837b0356d7450bbe972592deef0c2c1d1d6"
+                "sha256:12be2679634e8f93a39f84433cdd91a53de1f875214f6902145f0531b5b1e40a"
             ],
-            "version": "==1.6.5"
+            "version": "==1.6.13"
         },
         "flask": {
             "hashes": [
