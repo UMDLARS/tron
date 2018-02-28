@@ -93,6 +93,7 @@ class Tron(GridGame):
                     self.map[(player.x, player.y)] = player.char
                 if player.derezzed:
                     self.derezz(player)
+                    self.msg_panel.add("{} was derezzed".format(player.name))
                 else:
                     self.num_alive += 1
 

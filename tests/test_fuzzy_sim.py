@@ -16,7 +16,8 @@ def get_fuzzing_seeds(new_seed_count=100):
 
 
 @pytest.mark.parametrize("seed", get_fuzzing_seeds())
-def test_run_for_playback(seed):
+@pytest.mark.parametrize("playback", [False, True])
+def test_run_for_score(seed, playback):
     # Make default player bot
     compiler = Compiler()
     bot = Game.default_prog_for_bot(GameLanguage.LITTLEPY)
@@ -27,25 +28,7 @@ def test_run_for_playback(seed):
     players = []
     for _ in range(Game.get_number_of_players() - 1):
         players += [Game.default_prog_for_computer()()]
-    room = Room([prog] + players)
+    room = Room([prog] + players, seed=seed)
 
-    runner = GameRunner(Game, room)
-    runner.run_for_playback(seed=seed)
-
-
-@pytest.mark.parametrize("seed", get_fuzzing_seeds())
-def test_run_for_score(seed):
-    # Make default player bot
-    compiler = Compiler()
-    bot = Game.default_prog_for_bot(GameLanguage.LITTLEPY)
-    prog = compiler.compile(bot)
-    prog.name = "Mock"
-
-    # get computer players
-    players = []
-    for _ in range(Game.get_number_of_players() - 1):
-        players += [Game.default_prog_for_computer()()]
-    room = Room([prog] + players)
-
-    runner = GameRunner(Game, room)
-    runner.run_for_avg_score(1, seed=seed, func=sum)
+    runner = GameRunner(Game)
+    runner.run(room, playback=playback)
