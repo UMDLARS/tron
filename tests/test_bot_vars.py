@@ -10,6 +10,7 @@ class MockProg(Prog):
         self.state = {}
         self.options = {}
         self.last_state = None
+        self.name = "Mock"
 
     def run(self, state=None, **kwargs):
         self.last_state = state
