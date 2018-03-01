@@ -1,19 +1,19 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0d342c9182296add3cff5bebd50298c2232bf9eb9a606c5ec81fa6538f2e4574"
+            "sha256": "35c491522786ffb8fc48081d70ed9a5d256457379ba3e8e6cb175a265129c3e5"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
-            "implementation_version": "3.5.2",
+            "implementation_version": "3.6.3",
             "os_name": "posix",
             "platform_machine": "x86_64",
             "platform_python_implementation": "CPython",
             "platform_release": "4.4.0-112-generic",
             "platform_system": "Linux",
             "platform_version": "#135-Ubuntu SMP Fri Jan 19 11:48:36 UTC 2018",
-            "python_full_version": "3.5.2",
-            "python_version": "3.5",
+            "python_full_version": "3.6.3",
+            "python_version": "3.6",
             "sys_platform": "linux"
         },
         "pipfile-spec": 6,
@@ -145,9 +145,9 @@
         },
         "littlepython": {
             "hashes": [
-                "sha256:e9000eb1f3c455ca1efe740ec95594caec13a510855db7647771940639ee89c4"
+                "sha256:6722f8b1819220c6bf6bce1641169146e1ad4b7b32f1e15ef25b7aa781ba937d"
             ],
-            "version": "==0.4.5"
+            "version": "==0.4.6"
         },
         "markdown": {
             "hashes": [
@@ -436,10 +436,10 @@
         },
         "pytest-mock": {
             "hashes": [
-                "sha256:23fd6bfb144d96c37441bced2a86ed5fee66fa5c05a13940866f1396628279fe",
-                "sha256:8ed6c9ac6b7565b226b4da2da48876c9198d76401ec8d9c5e4c69b45423e33f8"
+                "sha256:03a2fea79d0a83a8de2e77e92afe5f0a5ca99a58cc68f843f9a74de34800a943",
+                "sha256:b879dff61e31fcd4727c227c182f15f222a155293cc64ed5a02d55e0020cf949"
             ],
-            "version": "==1.7.0"
+            "version": "==1.7.1"
         },
         "pytest-runner": {
             "hashes": [
