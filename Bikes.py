@@ -21,6 +21,7 @@ class Bike(DefaultGridPlayer):
         self.prev_move = None
         self.old = None
         self.derezzed = False
+        self.quit = False
         self.sensor_coords = []
 
         self.CHAR_START = ord(self.char) + 1
@@ -103,7 +104,7 @@ class Bike(DefaultGridPlayer):
         if self.move == "d":
             self.do_move("EAST")
         if self.move == "Q":  # Should this be an else statement. Then any invalid input is the same as quiting.
-            self.derezzed = True
+            self.quit = True
 
         self.update_sensors(state)
 

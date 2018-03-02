@@ -38,9 +38,9 @@
         },
         "cylgame": {
             "hashes": [
-                "sha256:12be2679634e8f93a39f84433cdd91a53de1f875214f6902145f0531b5b1e40a"
+                "sha256:0933211a7605fdb139e51d0e8c554d31340a940f051ebbd3daf838e4b3cce53c"
             ],
-            "version": "==1.6.13"
+            "version": "==1.6.14"
         },
         "flask": {
             "hashes": [
@@ -145,9 +145,9 @@
         },
         "littlepython": {
             "hashes": [
-                "sha256:6722f8b1819220c6bf6bce1641169146e1ad4b7b32f1e15ef25b7aa781ba937d"
+                "sha256:a327e71d3e9925a2a0f105aeb05cf96483e0af7cf20137828f47f0d87b6730cb"
             ],
-            "version": "==0.4.6"
+            "version": "==0.4.8"
         },
         "markdown": {
             "hashes": [

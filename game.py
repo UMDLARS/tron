@@ -96,6 +96,10 @@ class Tron(GridGame):
                     self.msg_panel.add("{} was derezzed".format(player.name))
                 else:
                     self.num_alive += 1
+            elif player.quit:
+                player.quit = False
+                self.derezz(player)
+                self.msg_panel.add("{} was derezzed".format(player.name))
 
         if self.num_alive == 1:
             winning_player = [p for p in self.players if not p.derezzed][0]
