@@ -1,10 +1,9 @@
 # TRON
-This is a example game created to serve as a template for other's making games for UMDCYL.
-## Getting Started
-This game depends on the CYLGame Framework. Which can be found here: [https://github.com/UMDCYL/CYLGame](https://github.com/UMDCYL/CYLGame)
-After installing the framework you can play the game by running:
-```
-python apple_game.py play
-```
+This is a game created for UMDCYL using the [CYLGame Framework](https://github.com/UMDCYL/CYLGame).
 
-If you have any questions feel free to contact: Jonathan Beaulieu @ <beau0307@d.umn.edu>
+# Installing and Playing This Game
+
+To install and play this game locally, follow the instructions in the [CYLGame repository](https://github.com/UMDLARS/CYLGame/blob/master/INSTALL_GAME.md).
+
+
+If you have any questions feel free to contact the devteam at <umdcyl-dev@d.umn.edu>.
