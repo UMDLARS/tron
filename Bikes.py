@@ -115,7 +115,7 @@ class DumbComputer(Prog):
         super(DumbComputer, self).__init__()
         self.last_move = None
 
-    def run(self, state=None, max_op_count=-1):
+    def run(self, state=None, max_op_count=-1, random=None):
         import random
         moves = list(map(ord, ["w", "a", "s", "d"]))
 

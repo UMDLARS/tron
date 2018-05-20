@@ -43,6 +43,9 @@ class Tron(GridGame):
         self.msg_panel.add("Welcome to Game GRID!!!")
         self.msg_panel.add("Stop The Corruption")
 
+    def start_game(self):
+        pass
+
     def init_board(self):
         self.map = MapPanel(1, 1, self.MAP_WIDTH, self.MAP_HEIGHT, self.EMPTY,
                             border=PanelBorder.create(bottom=True, left=True, right=True, top=True))
