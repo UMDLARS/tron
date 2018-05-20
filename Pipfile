@@ -1,26 +1,20 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [dev-packages]
-
 pygame = "*"
 pytest-flask = "*"
-"e1839a8" = {path = ".", editable = true}
 pytest-cov = "*"
 codecov = "*"
 pytest-mock = "*"
 pytest-runner = "*"
 ipython = "*"
 
-
 [packages]
 
 cylgame = "==1.6.*"
-
 
 [requires]
 
