@@ -153,8 +153,8 @@ class DumbComputer(Prog):
     def __get_pos(self, tup):
         col = tup[0]
         row = tup[1]
-        print(f"row{row} col {col}")
-        print(f"height {len(self.bot_vars['map_array'])} width {len(self.bot_vars['map_array'][0])}")
+        #print(f"row{row} col {col}")
+        #print(f"height {len(self.bot_vars['map_array'])} width {len(self.bot_vars['map_array'][0])}")
         return self.bot_vars['map_array'][col][row]
 
     def better_move(self, width, height):
