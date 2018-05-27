@@ -66,7 +66,7 @@ class Tron(GridGame):
 
     def start_game(self):
         self.update_player_states()
-    
+
     def place_bike(self, prog, bot_id):
         while True:
             x = self.random.randint(0, self.MAP_WIDTH - 1)
@@ -155,7 +155,8 @@ class Tron(GridGame):
 
     def update_player_states(self):
         for player in self.players:
-            player.bot_vars = self.get_vars(player)
+            if not player.derezzed:
+                player.bot_vars = self.get_vars(player)
 
     def get_vars(self, player):
         bot_vars = {"s{}".format(i+1): 0 for i in range(player.NUM_OF_SENSORS)}

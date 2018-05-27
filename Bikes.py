@@ -1,7 +1,7 @@
 import random
 
-#Values for Orange PNG start at 240
-#Values for player start at 230ish
+# Values for Orange PNG start at 240
+# Values for player start at 230ish
 from CYLGame import Player
 from CYLGame.Player import DefaultGridPlayer, Prog
 
@@ -48,10 +48,8 @@ class Bike(DefaultGridPlayer):
     def derezz(self):
         return self.path
 
-# I will need to implement an algorithm for the corruption to utilize
-# when making their decisions.  A suggested implementation is to use a
-# minimax algorithm. https://www.sifflez.org/misc/tronbot/
-
+    # I will need to implement an algorithm for the corruption to utilize when making their decisions.
+    # A suggested implementation is to use a minimax algorithm. https://www.sifflez.org/misc/tronbot/
     def det_prev_char(self, move):
         if self.prev_move == None:
             if move == "NORTH" or move == "SOUTH":
@@ -94,7 +92,6 @@ class Bike(DefaultGridPlayer):
     def update_state(self, state):
         super(Bike, self).update_state(state)
         # move = chr(state.get("move", ord("Q")))
-
         if self.move == "w":
             self.do_move("NORTH")
         if self.move == "s":
@@ -117,27 +114,98 @@ class Bike(DefaultGridPlayer):
 
 
 class DumbComputer(Prog):
-    def __init__(self):
+    def __init__(self, ):
         super(DumbComputer, self).__init__()
         self.last_move = None
         self.name = "Computer"
+        self.bot_vars = None
+        self.bot_consts = None
+        self.x = None
+        self.y = None
 
     def run(self, state=None, max_op_count=-1, random=None):
         if random is None:
             import random
         moves = list(map(ord, ["w", "a", "s", "d"]))
+        # print(f"State: {state}")
 
-        if self.last_move:
-            if self.last_move == ord("w"):
-                moves.remove(ord("s"))
-            if self.last_move == ord("s"):
-                moves.remove(ord("w"))
-            if self.last_move == ord("a"):
-                moves.remove(ord("d"))
-            if self.last_move == ord("d"):
-                moves.remove(ord("a"))
-            self.last_move = random.choice(moves)
-            return {"move": self.last_move}
+        if self.bot_vars:
+            self.bot_consts = self.bot_vars['bot_consts']
+            self.x = self.bot_vars['x']
+            self.y = self.bot_vars['y']
+            return {"move": self.better_move(len(self.bot_vars['map_array']), len(self.bot_vars['map_array'][0]))}
         else:
-            self.last_move = random.choice(moves)
-            return {"move": self.last_move}
+            if self.last_move:
+                if self.last_move == ord("w"):
+                    moves.remove(ord("s"))
+                if self.last_move == ord("s"):
+                    moves.remove(ord("w"))
+                if self.last_move == ord("a"):
+                    moves.remove(ord("d"))
+                if self.last_move == ord("d"):
+                    moves.remove(ord("a"))
+                self.last_move = random.choice(moves)
+                return {"move": self.last_move}
+            else:
+                self.last_move = random.choice(moves)
+                return {"move": self.last_move}
+
+    def __get_pos(self, tup):
+        col = tup[0]
+        row = tup[1]
+        print(f"row{row} col {col}")
+        print(f"height {len(self.bot_vars['map_array'])} width {len(self.bot_vars['map_array'][0])}")
+        return self.bot_vars['map_array'][col][row]
+
+    def better_move(self, width, height):
+        pos = []  # Most advantageous move
+        if self.y - 1 >= 0 and self.__get_pos((self.x, self.y - 1)) == self.bot_consts['OPEN']:
+            pos += [("w", self.__bfs(self.x, self.y - 1))]
+
+        if self.y + 1 < height and self.__get_pos((self.x, self.y + 1)) == self.bot_consts['OPEN']:
+            pos += [("s", self.__bfs(self.x, self.y + 1))]
+
+        if self.x - 1 >= 0 and self.__get_pos((self.x - 1, self.y)) == self.bot_consts['OPEN']:
+            pos += [("a", self.__bfs(self.x - 1, self.y))]
+
+        if self.x + 1 < width and self.__get_pos((self.x + 1, self.y)) == self.bot_consts['OPEN']:
+            pos += [("d", self.__bfs(self.x + 1, self.y))]
+
+        if not pos:
+            return ord("w")  # Gonna die, just pick a direction
+
+        return ord(max(pos, key=lambda i: i[1])[0])
+
+    def __bfs(self, x, y):
+        queue = []
+        visited = []
+        path = {}  # Not gonna bother with path.
+        start = (x, y)
+        path[start] = (None, None)
+        queue += [start]
+
+        while queue:
+            cur = queue.pop()
+
+            for i in self.get_neighbors():
+                if not self.__get_pos(i) and i not in visited:
+                    queue += [i]
+
+            visited += [cur]
+
+        return len(visited)
+
+    def get_neighbors(self):
+        nbors = []
+        x = self.x
+        y = self.y
+        if x - 1 >= 0:
+            nbors += [(x - 1, y)]
+        if x + 1 < len(self.bot_vars['map_array']):
+            nbors += [(x + 1, y)]
+        if y - 1 >= 0:
+            nbors += [(x, y - 1)]
+        if y + 1 < len(self.bot_vars['map_array'][0]):
+            nbors += [(x, y + 1)]
+
+        return nbors
