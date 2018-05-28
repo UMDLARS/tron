@@ -100,8 +100,3 @@ The remaining 3 `if` statements cover west, north and south.
 As you may have already guessed, your robot will move in whatever direction the variable `move` is set at the end of your program. Your program will run **300** times, and your score is the number of apples your robot manages to find during that time.
 
 Of course, your current program just walks around randomly. So it's not very good.
-
-
-## Level 1: Helping Peter Navigate the Grid
-
-Use your l337 skills to help Peter navigate the GRID!
