@@ -6,10 +6,40 @@ After a long night of working on the new  LARS AI, aptly named the LARS TIRED (T
 
 Digging Peter realizes that there has been an error with the TIRED AI and it has gone rogue! TIRED digitizes the intrusive Professor and brings him to where all bad programs go: THE GAME GRID.
 
-**Your job is to write a program to help the professor destroy the malicious programs on the GAME GRID and survive!**
+**Your job is to write a program to help the professor beat the malicious programs on the GAME GRID in a game of light cycles!**
 
-#Sensors
-`map_array`, `height`, `width`, `s0`, `s1`, `s2`, `s3`, `s4`, `s5`, `s6`, `s7`, `s8`
+# Game
+TRON is a game adapted from the [1982 Documentary of the same name](https://en.wikipedia.org/wiki/Tron). In the game, you control one robot riding a *light cycle*, a kind of motorcycle that makes 90-degree turns and leaves an impenetrable *jetwall* behind it. If you crash into a any jetwall, you are out of the game. When a robot leaves the game, their jetwall disappears. The winner is the last robot standing.
+
+# Scoring
+
+Currently, your score is your rank, where higher is better. We are going to change this to reflect both your rank and the number of turns you play.
+
+# Motion
+
+Your light cycle can go `north`, `south`, `east`, or `west`. At the end of every turn, you must set the variable `move` to one of these directions. You can't stay in the same place!
+
+# Sensors
+
+Robot can access two basic types of information: configurable point sensors, and the map array.
+
+## Configurable point sensors
+
+Your robot has nine configurable point sensors (`s0`, `s1`, `s2`, `s3`, `s4`, `s5`, `s6`,`s7`, and `s8`) that tell you what is located at a particular point on the map. In TRON, a space can be one of three values: 
+
+ * `TAKEN` (it has a robot in it), 
+ * `WALL` (there is a jetwall there)
+ * `EMPTY` (it is empty space).
+
+You can choose where you want the sensor to "look" (relative to your own position) by setting the variables `sNx` and `sNy` (where `N` is the sensor number 0-8). For example, if you set `s1x` to 0 and `s1y` to 0, the sensor `s1` will always have you in it, because your `x + 0` and your `y + 0` is where you are. If you set `s1x` to 0 and `s1y` to -1, the sensor `s1` will tell you what is immediately north of you. By setting the `x` and `y` values accordingly, you can check ever space next to you.
+
+## The Map Array
+
+The variable `map_array` is a *two-dimensional array* containing the entire map. A 2D array is an array of arrays -- here, it is an array of columns (where each column is, itself, an array). 
+
+If that's confusing, don't worry. The important thing is that you can find out what is at any location in the map by accessing the array as `map_array[x][y]`, where `x` is the x-value and `y` is the y-value. Unlike you have learned in math class, in computer graphics it is common for coordinates (0,0) to be the upper left corner of the map, and to have numbers increase going down and to the right. In this scheme, the lower-right corner of the map is represented as `map_array[width][height]` (the variables `width` and `height` have the width and height of the map).
+
+Using `for` loops, you can search through the entire map array.
 
 ## The Default Program
 
