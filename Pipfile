@@ -4,10 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
+ipython = "*"
+pygame = "*"
+codecov = "*"
+pytest-cov = "*"
+pytest-flask = "*"
+pytest-mock = "*"
+pytest-runner = "*"
+
 
 [packages]
 cylgame = "~=1.6.0"
 
 [requires]
-
 python_version = "3.6"
