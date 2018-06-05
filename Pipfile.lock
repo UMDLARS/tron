@@ -25,10 +25,10 @@
         },
         "cylgame": {
             "hashes": [
-                "sha256:1c4e3f5789b1ac9f0288c8e34b0f2db9dddb9d074976b59127f3468e68657de5"
+                "sha256:a488e7e63e6ca3bccff69da98163da8a635a9b990ce8915c8fa10347139d8fe4"
             ],
             "index": "pypi",
-            "version": "==1.6.25"
+            "version": "==1.6.27"
         },
         "flask": {
             "hashes": [
@@ -457,10 +457,10 @@
         },
         "pytest": {
             "hashes": [
-                "sha256:39555d023af3200d004d09e51b4dd9fdd828baa863cded3fd6ba2f29f757ae2d",
-                "sha256:c76e93f3145a44812955e8d46cdd302d8a45fbfc7bf22be24fe231f9d8d8853a"
+                "sha256:26838b2bc58620e01675485491504c3aa7ee0faf335c37fcd5f8731ca4319591",
+                "sha256:32c49a69566aa7c333188149ad48b58ac11a426d5352ea3d8f6ce843f88199cb"
             ],
-            "version": "==3.6.0"
+            "version": "==3.6.1"
         },
         "pytest-cov": {
             "hashes": [

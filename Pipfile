@@ -12,7 +12,6 @@ pytest-flask = "*"
 pytest-mock = "*"
 pytest-runner = "*"
 
-
 [packages]
 cylgame = "~=1.6.0"
 
