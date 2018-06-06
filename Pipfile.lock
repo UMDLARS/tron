@@ -25,10 +25,10 @@
         },
         "cylgame": {
             "hashes": [
-                "sha256:a488e7e63e6ca3bccff69da98163da8a635a9b990ce8915c8fa10347139d8fe4"
+                "sha256:1fec2a4d293a280aa92c1d9556db5d2a81c12845497e2edcf9d048b37f69b2d6"
             ],
             "index": "pypi",
-            "version": "==1.6.27"
+            "version": "==1.6.28"
         },
         "flask": {
             "hashes": [
