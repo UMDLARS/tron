@@ -177,6 +177,10 @@ class Tron(GridGame):
         bot_vars["width"] = self.MAP_WIDTH
 
         bot_vars["map"] = self.get_map_array()
+
+        bot_vars["player_x"] = player.x
+        bot_vars["player_y"] = player.y
+
         return bot_vars
 
     def get_map_array(self):
